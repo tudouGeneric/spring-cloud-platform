@@ -35,6 +35,7 @@
         <flyway.core.version>5.2.4</flyway.core.version>
         <hutool.version>5.1.1</hutool.version>
         <commons-lang3.version>3.10</commons-lang3.version>
+        <aop.version>2.2.0.RELEASE</aop.version>
     </properties>
 
     <dependencyManagement>
@@ -107,6 +108,13 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
+            </dependency>
+
+            <!-- aop依赖 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+                <version>${aop.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -15,6 +15,12 @@
     <artifactId>component-mybatisplus</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>org.honeybee</groupId>
+            <artifactId>generic-base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- mybatis-plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -37,6 +43,12 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <!-- aop依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
     </dependencies>
 
