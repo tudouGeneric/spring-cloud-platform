@@ -1,4 +1,21 @@
 spring:
   profiles:
-    active: dev   #�����ļ�
+    active: dev   #配置文件版本
+
+##mybatis-plus配置
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+      field-strategy: not_empty
+      table-underline: true
+      db-type: mysql
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+  mapper-locations: classpath:/mapper/*.xml
+
+##flyway配置
+flyway:
+  enable: true
+#  location: classpath:db/migration
 
