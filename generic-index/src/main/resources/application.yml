@@ -12,7 +12,8 @@ mybatis-plus:
       db-type: mysql
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
-  mapper-locations: classpath:/mapper/*/*.xml
+  mapper-locations: classpath:/mapper/*.xml
+  typeEnumsPackage: org.honeybee.*.enums  # 配置扫描通用枚举， 支持统配符 * 或者 ; 分割
 
 ##flyway配置
 flyway:
