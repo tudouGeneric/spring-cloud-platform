@@ -31,7 +31,7 @@ public class StudentController {
     public ResponseMessage saveStudent(@RequestBody @Validated(StudentAddVaildGroup.class) StudentDTO student) {
         Student s = new Student();
         BeanUtils.copyProperties(student, s, "id");
-        System.out.println(s.toString());
+        log.info(s.toString());
         studentService.save(s);
         return ResponseMessage.success("新增成功");
     }
