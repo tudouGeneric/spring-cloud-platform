@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration  scan="true" scanPeriod="300 seconds" debug="false">
     <contextName>logback</contextName>
-    <property name="log.path" value="F:\\log\\springCloudPlatform\\logback.log" />
     <property name="log.project.path" value="log" />
     <!--自定义颜色配置-->
     <conversionRule conversionWord="customcolor" converterClass="org.honeybee.base.config.log.LogbackColorful"/>
