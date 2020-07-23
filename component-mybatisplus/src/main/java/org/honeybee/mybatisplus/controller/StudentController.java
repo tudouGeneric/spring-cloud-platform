@@ -1,5 +1,9 @@
 package org.honeybee.mybatisplus.controller;
 
+import com.github.xiaoymin.knife4j.annotations.DynamicParameter;
+import com.github.xiaoymin.knife4j.annotations.DynamicParameters;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.honeybee.base.common.ResponseMessage;
 import org.honeybee.mybatisplus.dto.StudentDTO;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/test/student")
 @Slf4j
+@Api(tags = "Student测试功能接口")
 public class StudentController {
 
     @Autowired
@@ -27,6 +32,7 @@ public class StudentController {
      * @param student
      * @return
      */
+    @ApiOperation(value = "新增学生")
     @PostMapping
     public ResponseMessage saveStudent(@RequestBody @Validated(StudentAddVaildGroup.class) StudentDTO student) {
         Student s = new Student();

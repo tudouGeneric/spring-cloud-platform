@@ -1,20 +1,26 @@
 package org.honeybee.base.common;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
  * 返回数据
  */
 @Data
+@ApiModel("通用接口返回对象")
 public class ResponseMessage<T> {
 
     //消息
+    @ApiModelProperty(required = true, notes = "返回提示信息")
     private String message;
 
     //内容
+    @ApiModelProperty(notes = "返回结果")
     private T result;
 
     //状态码
+    @ApiModelProperty(required = true, notes = "http状态码", example = "200")
     private int status;
 
     private ResponseMessage() {
