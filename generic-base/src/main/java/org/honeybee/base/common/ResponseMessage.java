@@ -23,44 +23,85 @@ public class ResponseMessage<T> {
     @ApiModelProperty(required = true, notes = "http状态码", example = "200")
     private int status;
 
+    //执行成功/失败的布尔值
+    @ApiModelProperty(required = true, notes = "执行成功/失败", example = "true")
+    private Boolean flag;
+
     private ResponseMessage() {
 
     }
 
-    private ResponseMessage(String message, int status) {
+    private ResponseMessage(String message, int status, Boolean flag) {
         this.message = message;
         this.status = status;
+        this.flag = flag;
     }
 
-    private ResponseMessage(String message, T result, int status) {
+    private ResponseMessage(String message, T result, int status, Boolean flag) {
         this.message = message;
         this.result = result;
         this.status = status;
+        this.flag = flag;
     }
 
     /**
-     * 成功时返回
+     * 执行成功时返回
      * @param result
      * @param <T>
      * @return
      */
-    public static <T> ResponseMessage<T> success(T result) {
-        return new ResponseMessage("success", result, 200);
+    public static <T> ResponseMessage<T> success(String message) {
+        return new ResponseMessage(message,200, true);
     }
 
     /**
-     * 出现异常时返回
+     * 执行成功时返回
      * @param message
-     * @param status
+     * @param result
      * @param <T>
+     */
+    public static <T> ResponseMessage<T> success(String message, T result) {
+        return new ResponseMessage(message, result, 200, true);
+    }
+
+    /**
+     * 执行失败时返回
+     * @param message
+     * @return
+     */
+    public static <T> ResponseMessage<T> fail(String message) {
+        return new ResponseMessage(message, 200, false);
+    }
+
+    /**
+     * 发生异常时返回
+     * @param message
      * @return
      */
     public static <T> ResponseMessage<T> error(String message, int status) {
-        return new ResponseMessage(message, status);
+        return new ResponseMessage(message, status, false);
     }
 
+    /**
+     * 执行失败时返回
+     * @param message
+     * @param result
+     * @param <T>
+     * @return
+     */
+    public static <T> ResponseMessage<T> fail(String message, T result) {
+        return new ResponseMessage(message, result, 200, false);
+    }
+
+    /**
+     * 发生异常时返回
+     * @param message
+     * @param result
+     * @param <T>
+     * @return
+     */
     public static <T> ResponseMessage<T> error(String message, T result, int status) {
-        return new ResponseMessage(message, result, status);
+        return new ResponseMessage(message, result, status, false);
     }
 
 }

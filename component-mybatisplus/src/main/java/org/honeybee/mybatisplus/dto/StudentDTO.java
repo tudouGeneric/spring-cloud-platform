@@ -42,6 +42,7 @@ public class StudentDTO {
     @ExcelProperty(index = 2, converter = StudentIdentityConverter.class, value = "身份")
     private StudentIdentityEnum  identity;
 
+    //测试导入导出用[无实际意义字段]
     @ExcelProperty(index = 3, value = "日期")
     @DateTimeFormat("yyyy-MM-dd")
     private Date date;

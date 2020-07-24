@@ -1,14 +1,18 @@
 package org.honeybee.mybatisplus.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.honeybee.base.common.ResponseMessage;
+import org.honeybee.base.vo.ResultVO;
 import org.honeybee.file.util.EasyExcelUtil;
 import org.honeybee.mybatisplus.dto.StudentDTO;
+import org.honeybee.mybatisplus.dto.StudentQueryDTO;
 import org.honeybee.mybatisplus.entity.Student;
 import org.honeybee.mybatisplus.service.StudentService;
 import org.honeybee.mybatisplus.valid.group.StudentAddVaildGroup;
+import org.honeybee.mybatisplus.valid.group.StudentUpdateValidGroup;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -36,12 +40,46 @@ public class StudentController {
     @ApiOperation(value = "新增学生")
     @PostMapping
     public ResponseMessage saveStudent(@RequestBody @Validated(StudentAddVaildGroup.class) StudentDTO student) {
-        Student s = new Student();
-        BeanUtils.copyProperties(student, s, "id");
-        log.info(s.toString());
-        studentService.save(s);
-        return ResponseMessage.success("新增成功");
+        ResultVO resultVO = studentService.saveStudent(student);
+        return ResultVO.getResponseMessage(resultVO);
     }
+
+    /**
+     * 修改学生
+     * @param student
+     * @return
+     */
+    @ApiOperation(value = "修改学生")
+    @PutMapping
+    public ResponseMessage updateStudent(@RequestBody @Validated(StudentUpdateValidGroup.class) StudentDTO student) {
+        ResultVO resultVO = studentService.updateStudent(student);
+        return ResultVO.getResponseMessage(resultVO);
+    }
+
+    /**
+     * 批量删除学生
+     * @param ids
+     * @return
+     */
+    @ApiOperation(value = "删除学生")
+    @DeleteMapping
+    public ResponseMessage deleteStudent(@RequestBody List<Long> ids) {
+        ResultVO resultVO = studentService.batchDeleteStudent(ids);
+        return ResultVO.getResponseMessage(resultVO);
+    }
+
+    /**
+     * 分页查询学生
+     * @param queryDTO
+     * @return
+     */
+    @PostMapping("/query")
+    @ApiOperation(value = "分页查询学生")
+    public ResponseMessage queryStudent(@RequestBody StudentQueryDTO queryDTO) {
+        IPage result = studentService.queryStudentByPage(queryDTO);
+        return ResponseMessage.success("查询成功", result);
+    }
+
 
     /**
      * 导入学生（单sheet文件导入）

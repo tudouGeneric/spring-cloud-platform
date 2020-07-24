@@ -6,7 +6,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://139.196.137.238:3306/spring_cloud_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&useAffectedRows=true
+    url: jdbc:mysql://139.196.137.238:3306/spring_cloud_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&useAffectedRows=true&serverTimezone=Asia/Shanghai
     username: root
     password: root
     druid:
