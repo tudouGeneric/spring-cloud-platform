@@ -1,7 +1,11 @@
 package org.honeybee.file.util;
 
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
@@ -13,8 +17,12 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.honeybee.base.common.ResponseMessage;
 import org.honeybee.base.holder.RequestHolder;
+import org.honeybee.file.common.SheetExcelData;
+import org.honeybee.file.handler.CustomCellStyleStrategy;
 import org.honeybee.file.listener.ExcelListener;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
@@ -126,26 +134,120 @@ public class EasyExcelUtil {
                 excelReader.finish();
             }
         }*/
-        return new ArrayList<>();
+        return null;
     }
 
     /**
      * 导出文件
      * 导出模板时，tList传一个空list即可
+     * @param fileName
+     * @param sheetName
      * @param tList 数据集
      * @param tClass 数据类型
      * @param <T>
      * @throws IOException
      */
-    public static <T> void writeSingleExcel(String fileName,String sheetName, List<T> tList, Class tClass) throws IOException{
+    public static <T> void writeSingleExcel(String fileName, String sheetName, List<T> tList, Class tClass) throws IOException {
+        HttpServletResponse response = RequestHolder.getResponse();
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            setResponse(fileName, response);
+            EasyExcel.write(outputStream, tClass).autoCloseStream(Boolean.TRUE)
+                    .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())   //设置自动列宽
+                    .registerWriteHandler(new CustomCellStyleStrategy())   //设置自定义样式
+                    .sheet(sheetName)
+                    .doWrite(tList);
+        } catch (Exception e) {
+            errorWrite(response, e);
+        }
+    }
+
+    /**
+     * 导出文件
+     * 导出模板时，tList传一个空list即可
+     * @param fileName
+     * @param sheetName
+     * @param tList
+     * @param tClass
+     * @param customCellStyleStrategy
+     * @param <T>
+     * @throws IOException
+     */
+    public static <T> void writeSingleExcel(String fileName, String sheetName, List<T> tList, Class tClass, CustomCellStyleStrategy customCellStyleStrategy) throws IOException{
+        HttpServletResponse response = RequestHolder.getResponse();
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            setResponse(fileName, response);
+            EasyExcel.write(outputStream, tClass).autoCloseStream(Boolean.TRUE)
+                    .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())   //设置自动列宽
+                    .registerWriteHandler(customCellStyleStrategy)   //设置自定义样式
+                    .sheet(sheetName)
+                    .doWrite(tList);
+        } catch (Exception e) {
+            errorWrite(response, e);
+        }
+    }
+
+    /**
+     * 导出多sheet
+     * @param fileName 文件名
+     * @param sheetExcelDataList sheet对象
+     * @throws IOException
+     */
+    public static void writeMultiExcel(String fileName, List<SheetExcelData> sheetExcelDataList) throws IOException {
         HttpServletResponse response = RequestHolder.getResponse();
         ServletOutputStream outputStream = response.getOutputStream();
         setResponse(fileName, response);
-        EasyExcel.write(outputStream, tClass).autoCloseStream(Boolean.TRUE)
-                .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())   //设置自动列宽
-//                .registerWriteHandler(getCustomStyle())   //设置自定义样式
-                .sheet(sheetName)
-                .doWrite(tList);
+        ExcelWriter excelWriter = EasyExcel.write(outputStream).autoCloseStream(Boolean.FALSE).build();
+        try {
+            for (int i=0, length=sheetExcelDataList.size(); i<length; i++) {
+                WriteSheet writeSheet = EasyExcel.writerSheet(i+1, sheetExcelDataList.get(i).getSheetName())
+                        .head(sheetExcelDataList.get(i).getTClass())
+                        .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).build();
+                excelWriter.write(sheetExcelDataList.get(i).getDataList(), writeSheet);
+            }
+        } catch (Exception e) {
+            errorWrite(response, e);
+        }finally {
+            // 刷新流，不加这句话，下载文件损坏打不开
+            outputStream.flush();
+            if(excelWriter != null){
+                // 千万别忘记finish关闭流
+                excelWriter.finish();
+            }
+        }
+    }
+
+    /**
+     * 导出多sheet
+     * @param fileName 文件名
+     * @param sheetExcelDataList sheet对象
+     * @throws IOException
+     */
+    public static void writeMultiExcel(String fileName, List<SheetExcelData> sheetExcelDataList, CustomCellStyleStrategy customCellStyleStrategy) throws IOException{
+        HttpServletResponse response = RequestHolder.getResponse();
+        ServletOutputStream outputStream = response.getOutputStream();
+        setResponse(fileName, response);
+        ExcelWriter excelWriter = EasyExcel.write(outputStream).autoCloseStream(Boolean.FALSE).build();
+        try {
+            for (int i = 0,length = sheetExcelDataList.size(); i < length; i++) {
+                WriteSheet writeSheet = EasyExcel.writerSheet(i+1, sheetExcelDataList.get(i).getSheetName())
+                        .head(sheetExcelDataList.get(i).getTClass())
+                        .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+                        .registerWriteHandler(customCellStyleStrategy)
+                        .build();
+                excelWriter.write(sheetExcelDataList.get(i).getDataList(), writeSheet);
+            }
+        } catch (Exception e) {
+            errorWrite(response, e);
+        }finally {
+            // 刷新流，不加这句话，下载文件损坏打不开
+            outputStream.flush();
+            if(excelWriter != null){
+                // 千万别忘记finish关闭流
+                excelWriter.finish();
+            }
+        }
     }
 
     /**
@@ -164,26 +266,19 @@ public class EasyExcelUtil {
         response.setHeader("Content-disposition", "attachment;filename=" + fileName);
     }
 
-    private static HorizontalCellStyleStrategy getCustomStyle() {
-        // 头的策略
-        WriteCellStyle headWriteCellStyle = new WriteCellStyle();
-        // 背景
-        headWriteCellStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-        WriteFont headWriteFont = new WriteFont();
-        headWriteFont.setFontHeightInPoints((short)25);
-        headWriteCellStyle.setWriteFont(headWriteFont);
-        // 内容的策略
-        WriteCellStyle contentWriteCellStyle = new WriteCellStyle();
-        // 这里需要指定 FillPatternType 为FillPatternType.SOLID_FOREGROUND 不然无法显示背景颜色.头默认了 FillPatternType所以可以不指定
-        contentWriteCellStyle.setFillPatternType(FillPatternType.SOLID_FOREGROUND);
-        // 背景
-        contentWriteCellStyle.setFillForegroundColor(IndexedColors.WHITE.getIndex());
-        WriteFont contentWriteFont = new WriteFont();
-        // 字体大小
-        contentWriteFont.setFontHeightInPoints((short)20);
-        contentWriteCellStyle.setWriteFont(contentWriteFont);
-        // 这个策略是 头是头的样式 内容是内容的样式 其他的策略可以自己实现
-        return new HorizontalCellStyleStrategy(headWriteCellStyle, contentWriteCellStyle);
+    /**
+     * 导出错误
+     * @param response
+     * @param e
+     * @throws IOException
+     */
+    private static void errorWrite(HttpServletResponse response, Exception e) throws IOException {
+        // 重置response
+        log.error(e.getMessage(), e);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.getWriter().println(JSONUtil.toJsonStr(ResponseMessage.fail("导出失败")));
     }
 
 }

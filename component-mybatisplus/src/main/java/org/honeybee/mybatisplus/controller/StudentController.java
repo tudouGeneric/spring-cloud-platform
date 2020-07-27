@@ -89,21 +89,8 @@ public class StudentController {
     @PostMapping("/import")
     @ApiOperation(value = "导入学生")
     public ResponseMessage importStudent(MultipartFile file) throws IOException {
-        //校验文件类型
-        String fileName = file.getOriginalFilename();
-        if(!EasyExcelUtil.isExcel2003(fileName) && !EasyExcelUtil.isExcel2007(fileName)) {
-            return ResponseMessage.error("导入的excel文件格式错误", 500);
-        }
-        //获取导入数据
-        List<StudentDTO> list = EasyExcelUtil.readSingleExcel(file, new StudentDTO(), 1);
 
-        //执行业务逻辑
-        for(StudentDTO dto : list) {
-            Student s = new Student();
-            BeanUtils.copyProperties(dto, s, "id");
-            studentService.save(s);
-        }
-        return ResponseMessage.success("导入成功" + list.size() +"条数据");
+        return ResponseMessage.success("");
     }
 
     /**

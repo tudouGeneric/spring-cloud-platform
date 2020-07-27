@@ -7,7 +7,9 @@ import org.honeybee.mybatisplus.dto.StudentDTO;
 import org.honeybee.mybatisplus.dto.StudentQueryDTO;
 import org.honeybee.mybatisplus.entity.Student;
 import org.honeybee.mybatisplus.vo.StudentVO;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface StudentService extends IService<Student> {
@@ -39,5 +41,13 @@ public interface StudentService extends IService<Student> {
      * @return
      */
     IPage queryStudentByPage(StudentQueryDTO queryDTO);
+
+    /**
+     * 导入学生
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    ResultVO importStudent(MultipartFile file) throws IOException;
 
 }
