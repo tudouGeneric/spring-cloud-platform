@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.honeybee.file.util.Fileutil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -89,8 +90,8 @@ public class StudentController {
     @PostMapping("/import")
     @ApiOperation(value = "导入学生")
     public ResponseMessage importStudent(MultipartFile file) throws IOException {
-
-        return ResponseMessage.success("");
+        ResultVO vo = studentService.importStudent(file);
+        return ResultVO.getResponseMessage(vo);
     }
 
     /**
@@ -108,6 +109,15 @@ public class StudentController {
             data.add(dto);
         });
         EasyExcelUtil.writeSingleExcel("学生", "学生", data, StudentDTO.class);
+    }
+
+    /**
+     * 下载导入模板
+     */
+    @GetMapping("/download/studentTemplate")
+    @ApiOperation(value = "下载导入模板")
+    public void downloadImportTemplate() throws IOException {
+        Fileutil.downloadFile("学生.xlsx", "excel/studentImport.xlsx");
     }
 
 }

@@ -1,20 +1,14 @@
 package org.honeybee.file.util;
 
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.style.WriteCellStyle;
-import com.alibaba.excel.write.metadata.style.WriteFont;
-import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.honeybee.base.common.ResponseMessage;
@@ -275,6 +269,7 @@ public class EasyExcelUtil {
     private static void errorWrite(HttpServletResponse response, Exception e) throws IOException {
         // 重置response
         log.error(e.getMessage(), e);
+        response.reset();
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());

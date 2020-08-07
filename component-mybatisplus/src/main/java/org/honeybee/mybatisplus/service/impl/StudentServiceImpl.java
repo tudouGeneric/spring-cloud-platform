@@ -1,13 +1,11 @@
 package org.honeybee.mybatisplus.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.honeybee.base.common.ResponseMessage;
 import org.honeybee.base.vo.ResultVO;
 import org.honeybee.file.util.EasyExcelUtil;
 import org.honeybee.mybatisplus.dto.StudentDTO;
@@ -15,7 +13,6 @@ import org.honeybee.mybatisplus.dto.StudentQueryDTO;
 import org.honeybee.mybatisplus.entity.Student;
 import org.honeybee.mybatisplus.mapper.StudentMapper;
 import org.honeybee.mybatisplus.service.StudentService;
-import org.honeybee.mybatisplus.vo.StudentVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -132,22 +129,70 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         String fileName = file.getOriginalFilename();
         if(!EasyExcelUtil.isExcel2003(fileName) && !EasyExcelUtil.isExcel2007(fileName)) {
             resultVO.setMessage("导入的excel文件格式错误");
+            resultVO.setFlag(false);
             return resultVO;
         }
         //获取导入数据
         List<StudentDTO> list = EasyExcelUtil.readSingleExcel(file, new StudentDTO(), 1);
-
-        //校验字段信息
-
-
-        //执行业务逻辑
-        for(StudentDTO dto : list) {
-            Student s = new Student();
-            BeanUtils.copyProperties(dto, s, "id");
-//            studentService.save(s);
+        if(list == null || list.size() < 1) {
+            resultVO.setMessage("导入文件为空");
+            resultVO.setFlag(false);
+            return resultVO;
         }
 
-        return null;
+        StringBuilder sbd = new StringBuilder();
+        Boolean flag = true;
+
+        //校验字段信息
+        for(int i=0; i<list.size(); i++) {
+            StudentDTO dto = list.get(i);
+            Boolean checkFlag = true;
+            StringBuilder builder = new StringBuilder();
+
+            if(StringUtils.isBlank(dto.getName())) {
+                builder.append("姓名为空;");
+                checkFlag = false;
+            } else {
+                if(studentMapper.findByName(dto.getName()) != null) {
+                    builder.append("该姓名已存在;");
+                    checkFlag = false;
+                }
+            }
+            if(dto.getAge() == null) {
+                builder.append("年龄为空;");
+                checkFlag = false;
+            } else if(dto.getAge() < 1 || dto.getAge() > 255) {
+                builder.append("年龄范围应该在(0,255);");
+                checkFlag = false;
+            }
+            if(dto.getIdentity() == null) {
+                builder.append("身份为空;");
+                checkFlag = false;
+            }
+
+            if(!checkFlag) {    //如果校验失败
+                flag = false;
+                sbd.append("第").append(i+1).append("行数据校验失败:").append(builder).append("\r\n");
+            }
+        }
+
+        //若校验成功
+        if(flag) {
+            //执行业务逻辑
+            for(StudentDTO dto : list) {
+                Student s = new Student();
+                BeanUtils.copyProperties(dto, s, "id");
+                studentMapper.insert(s);
+            }
+            resultVO.setMessage("导入成功");
+        } else {
+            resultVO.setFlag(false);
+            resultVO.setMessage(sbd.toString());
+        }
+
+        return resultVO;
     }
+
+
 
 }

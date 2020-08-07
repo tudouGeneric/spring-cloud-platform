@@ -6,7 +6,6 @@ import org.honeybee.base.vo.ResultVO;
 import org.honeybee.mybatisplus.dto.StudentDTO;
 import org.honeybee.mybatisplus.dto.StudentQueryDTO;
 import org.honeybee.mybatisplus.entity.Student;
-import org.honeybee.mybatisplus.vo.StudentVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
