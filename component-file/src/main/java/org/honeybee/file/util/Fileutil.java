@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -31,9 +30,9 @@ public class Fileutil {
 
         try {
             //判断文件是否存在
-            File file = new File(filePath);
-            if (!file.exists()) {
+            if (!FileUtil.exist(filePath)) {
                 error(response, "文件不存在");
+                return;
             }
 
             setResponse(fileName, response);
