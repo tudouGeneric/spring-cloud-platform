@@ -7,48 +7,30 @@
         <artifactId>spring-cloud-platform</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <name>mybatis-plus</name>
+    <name>rbac</name>
     <description>Demo project for Spring Boot</description>
     <packaging>jar</packaging>
 
     <groupId>org.honeybee</groupId>
-    <artifactId>component-mybatisplus</artifactId>
+    <artifactId>component-rbac</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>org.honeybee</groupId>
-            <artifactId>component-file</artifactId>
+            <artifactId>component-mybatisplus</artifactId>
             <version>${project.version}</version>
         </dependency>
 
-        <!-- mybatis-plus -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-
-        <!-- mybatis plus 代码生成器 -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-        </dependency>
-
-        <!-- Druid连接池 -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-        </dependency>
-
-        <!-- Mysql -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-
-        <!-- aop依赖 -->
+        <!--spring security-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!--jwt-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
         </dependency>
     </dependencies>
 

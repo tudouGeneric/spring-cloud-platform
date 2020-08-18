@@ -17,6 +17,12 @@ mybatis-plus:
 
 ##flyway配置
 flyway:
-  enable: true
+  enable: false
 #  location: classpath:db/migration
+
+##jwt配置
+jwt:
+  secret: secret
+  expiration: 7200000
+  token: Authorization
 

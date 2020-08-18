@@ -39,6 +39,8 @@
         <aop.version>2.2.0.RELEASE</aop.version>
         <knife4j.version>2.0.4</knife4j.version>
         <easyExcel.version>2.2.6</easyExcel.version>
+        <security.version>2.3.1.RELEASE</security.version>
+        <jjit.version>0.9.1</jjit.version>
     </properties>
 
     <dependencyManagement>
@@ -134,7 +136,19 @@
                 <version>${easyExcel.version}</version>
             </dependency>
 
+            <!--spring security-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${security.version}</version>
+            </dependency>
 
+            <!--jwt-->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjit.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
