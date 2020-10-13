@@ -28,7 +28,7 @@
 
         <dependency>
             <groupId>org.honeybee</groupId>
-            <artifactId>component-mybatisplus</artifactId>
+            <artifactId>component-rbac</artifactId>
             <version>${project.version}</version>
         </dependency>
 
