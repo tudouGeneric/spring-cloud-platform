@@ -1,6 +1,10 @@
 spring:
   profiles:
     active: dev   #配置文件版本
+  security:
+    user:
+      name: honeybee
+      password: 123456
 
 ##mybatis-plus配置
 mybatis-plus:
@@ -25,4 +29,3 @@ jwt:
   secret: secret
   expiration: 7200000
   token: Authorization
-

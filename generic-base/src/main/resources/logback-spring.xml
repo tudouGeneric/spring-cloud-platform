@@ -26,10 +26,8 @@
             <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} %line - %msg%n</pattern>
         </encoder>
         <!-- 配置只输出INFO以上级别的日志 -->
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
         </filter>
     </appender>
 
