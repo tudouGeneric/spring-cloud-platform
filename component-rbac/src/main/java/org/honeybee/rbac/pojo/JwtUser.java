@@ -57,10 +57,12 @@ public class JwtUser implements UserDetails {
         this.password = user.getPassword();
         this.lastPasswordResetDate = user.getLastPasswordResetDate();
         Set<SimpleGrantedAuthority> simpleGrantedAuthorities = new HashSet<>();
-        //FIXME 获取用户权限信息
-//        if(CollectionUtils.isNotEmpty()) {
-//
-//        }
+        if(CollectionUtils.isNotEmpty(user.getAuthorities())) {
+            for(String code : user.getAuthorities()) {
+                SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(code);
+                simpleGrantedAuthorities.add(simpleGrantedAuthority);
+            }
+        }
         this.authorities = simpleGrantedAuthorities;
     }
 

@@ -7,6 +7,7 @@ import org.honeybee.base.entity.BaseEntity;
 import org.honeybee.base.enums.DeleteStatusEnum;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户表
@@ -70,5 +71,9 @@ public class RbacUser extends BaseEntity {
      * 删除状态（0：未删除 [默认] ；1：已删除）
      */
     private DeleteStatusEnum deleteStatus = DeleteStatusEnum.EXISTED;
+
+    //表示该属性不为数据库表字段,但又是必须使用的
+    @TableField(exist = false)
+    private List<String> authorities;
 
 }
