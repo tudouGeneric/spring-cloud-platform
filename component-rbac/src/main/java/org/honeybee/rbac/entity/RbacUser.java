@@ -5,9 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.honeybee.base.entity.BaseEntity;
 import org.honeybee.base.enums.DeleteStatusEnum;
+import org.honeybee.base.enums.SexEnum;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  * 用户表
@@ -25,6 +26,11 @@ public class RbacUser extends BaseEntity {
      * 姓名
      */
     private String name;
+
+    /**
+     * 性别
+     */
+    private SexEnum sex;
 
     /**
      * 生日
@@ -60,7 +66,7 @@ public class RbacUser extends BaseEntity {
     /**
      * 头像地址
      */
-    private String avatar;
+    private String photoUrl;
 
     /**
      * 密码最后次更新时间
@@ -74,6 +80,6 @@ public class RbacUser extends BaseEntity {
 
     //表示该属性不为数据库表字段,但又是必须使用的
     @TableField(exist = false)
-    private List<String> authorities;
+    private Set<String> authorities;
 
 }

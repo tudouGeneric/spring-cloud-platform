@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.honeybee.rbac.mapper.RbacUserMapper">
+
+    <resultMap id="BaseResultMap" type="org.honeybee.rbac.entity.RbacUser">
+        <result column="id" property="id" />
+        <result column="age" property="age" />
+        <result column="name" property="name" />
+        <result column="sex" property="sex" />
+        <result column="birth" property="birth" />
+        <result column="account" property="account" />
+        <result column="password" property="password" />
+        <result column="nick_name" property="nickName" />
+        <result column="email" property="email" />
+        <result column="mobile_phone" property="mobilePhone" />
+        <result column="photo_url" property="photoUrl" />
+        <result column="last_password_reset_date" property="lastPasswordResetDate" />
+        <result column="delete_status" property="deleteStatus" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="version" property="version" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, age, name, sex, birth, account, password, nick_name, email, mobile_phone,
+        photo_url, last_password_reset_date, delete_status, created_by, created_time, updated_by, updated_time, version
+    </sql>
+    
+    <select id="getByAccount" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+            FROM rbac_user
+            WHERE delete_status = 0 AND account = #{account}
+    </select>
+    
+</mapper>

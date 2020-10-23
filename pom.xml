@@ -42,6 +42,7 @@
         <security.version>2.3.1.RELEASE</security.version>
         <security.jwt.version>1.1.1.RELEASE</security.jwt.version>
         <jjit.version>0.9.1</jjit.version>
+        <fastjson.version>1.2.73</fastjson.version>
     </properties>
 
     <dependencyManagement>
@@ -156,6 +157,13 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${jjit.version}</version>
+            </dependency>
+
+            <!--fastjson-->
+            <dependency>
+                <artifactId>fastjson</artifactId>
+                <groupId>com.alibaba</groupId>
+                <version>${fastjson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

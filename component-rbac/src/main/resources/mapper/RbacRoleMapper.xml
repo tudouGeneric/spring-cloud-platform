@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.honeybee.rbac.mapper.RbacRoleMapper">
+
+    <resultMap id="BaseResultMap" type="org.honeybee.rbac.entity.RbacRole">
+        <result column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="delete_status" property="deleteStatus" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="version" property="version" />
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id, code, name, description, delete_status, created_by, created_time, updated_by, updated_time, version
+    </sql>
+
+    <select id="findByCodeIn" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+            FROM rbac_role
+            WHERE delete_status = 0 AND code IN
+            <foreach collection="codes" index="index" item="code" open="(" separator="," close=")">
+                #{code}
+            </foreach>
+    </select>
+
+    <select id="findByUserId" resultMap="BaseResultMap">
+        SELECT
+            rr.id, rr.code, rr.name
+        FROM rbac_role rr
+            LEFT JOIN rbac_user_role rur ON rr.id = rur.role_id
+        WHERE rr.delete_status = 0 AND rur.user_id = #{userId}
+    </select>
+
+</mapper>

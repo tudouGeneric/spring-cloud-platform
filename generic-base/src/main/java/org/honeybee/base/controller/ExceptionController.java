@@ -2,6 +2,7 @@ package org.honeybee.base.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.honeybee.base.common.ResponseMessage;
+import org.honeybee.base.exception.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -32,14 +33,13 @@ public class ExceptionController {
      * @return FebsResponse
      */
     @ExceptionHandler(BindException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseMessage validException(BindException e) {
         e.printStackTrace();
         log.error("===============" + e.getMessage() + "===============");
         log.error("异常出现:", e);
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         Map<String, Object> result = this.getValidError(fieldErrors);
-        return ResponseMessage.error(result.get("errorMsg").toString(), result.get("errorList"), 400);
+        return ResponseMessage.error(result.get("errorMsg").toString(), result.get("errorList"), HttpStatus.BAD_REQUEST.value());
     }
 
     /**
@@ -47,7 +47,6 @@ public class ExceptionController {
      * @param e
      * @return
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseMessage validException(MethodArgumentNotValidException e) {
         e.printStackTrace();
@@ -55,7 +54,21 @@ public class ExceptionController {
         log.error("异常出现:", e);
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         Map<String, Object> result = this.getValidError(fieldErrors);
-        return ResponseMessage.error(result.get("errorMsg").toString(), result.get("errorList"), 400);
+        return ResponseMessage.error(result.get("errorMsg").toString(), result.get("errorList"), HttpStatus.BAD_REQUEST.value());
+    }
+
+    /**
+     * 捕捉自定义Service异常
+     * @param e
+     * @return
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseMessage customServiceException(ServiceException e) {
+        e.printStackTrace();
+        log.error("===============" + e.getMessage() + "===============");
+        log.error("异常出现:", e);
+        return ResponseMessage.error(e.getMessage(), e.getStatus());
     }
 
     /**
@@ -64,7 +77,6 @@ public class ExceptionController {
      * @param ex
      * @return
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Exception.class)
     public ResponseMessage globalException(HttpServletRequest request, Throwable ex) {
         ex.printStackTrace();

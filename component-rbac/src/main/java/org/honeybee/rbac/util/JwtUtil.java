@@ -5,8 +5,10 @@ import io.jsonwebtoken.CompressionCodecs;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.honeybee.base.exception.ServiceException;
 import org.honeybee.rbac.pojo.JwtUser;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -78,7 +80,7 @@ public class JwtUtil {
             final Claims claims = this.getClaimsFromToken(token);
             userId = Long.parseLong(String.valueOf(claims.get(CLAIM_KEY_USER_ID)));
         } catch (Exception e) {
-            throw new RuntimeException("获取用户id异常: {}", e);
+            throw new ServiceException(HttpStatus.INTERNAL_SERVER_ERROR, "获取用户id异常: " + e);
         }
         return userId;
     }
@@ -94,7 +96,7 @@ public class JwtUtil {
             final Claims claims = this.getClaimsFromToken(token);
             account = claims.getSubject();
         } catch (Exception e) {
-            throw new RuntimeException("获取用户账号异常: {}", e);
+            throw new ServiceException(HttpStatus.INTERNAL_SERVER_ERROR, "获取用户账号异常: " + e);
         }
         return account;
     }
@@ -140,7 +142,7 @@ public class JwtUtil {
             final Claims claims = getClaimsFromToken(token);
             expiration = claims.getExpiration();
         } catch (Exception e) {
-            throw new RuntimeException("获取token过期时间异常: {}", e);
+            throw new ServiceException(HttpStatus.INTERNAL_SERVER_ERROR, "获取token过期时间异常: " + e);
         }
         return expiration;
     }
