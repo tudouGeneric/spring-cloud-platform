@@ -73,3 +73,11 @@ CREATE TABLE IF NOT EXISTS `rbac_role_permission` (
   `permission_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色权限表';
+
+
+-- --------------------------------
+-- 初始化用户和角色
+-- --------------------------------
+INSERT INTO `rbac_user`(`id`, `age`, `name`, `sex`, `birth`, `account`, `password`, `nick_name`, `email`, `mobile_phone`, `photo_url`, `last_password_reset_date`, `delete_status`, `created_by`, `created_time`, `updated_by`, `updated_time`, `version`) VALUES (1, 0, '管理员', 'X', '2020-10-26 00:00:00', 'admin', '$2a$10$skro.LrrPfjbtoyQjsthgus/7WiTkQITJIzUMAi8MhDlnCUNgKS3G', '管理员', NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `rbac_role`(`id`, `code`, `name`, `description`, `delete_status`, `created_by`, `created_time`, `updated_by`, `updated_time`, `version`) VALUES (1, 'SUPER_ADMIN', '超级管理员', '拥有一切权限', 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `rbac_user_role`(`id`, `user_id`, `role_id`) VALUES (1, 1, 1);

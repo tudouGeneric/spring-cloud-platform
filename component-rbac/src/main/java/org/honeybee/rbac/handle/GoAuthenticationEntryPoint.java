@@ -18,7 +18,7 @@ public class GoAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
         httpServletResponse.setHeader("Content-type", "application/json;charset=utf-8");
-        ResponseMessage responseMessage = ResponseMessage.error("身份认证失败,请重新登录", HttpStatus.UNAUTHORIZED.value());
+        ResponseMessage responseMessage = ResponseMessage.error("身份认证失败", HttpStatus.UNAUTHORIZED.value());
         httpServletResponse.getWriter().write(JSONUtil.toJsonStr(responseMessage));
         httpServletResponse.getWriter().flush();
     }

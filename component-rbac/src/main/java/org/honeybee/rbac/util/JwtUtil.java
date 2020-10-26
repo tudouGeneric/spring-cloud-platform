@@ -7,6 +7,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.honeybee.base.exception.ServiceException;
 import org.honeybee.rbac.pojo.JwtUser;
+import org.honeybee.rbac.properties.AuthProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -14,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,14 +32,21 @@ public class JwtUtil {
 
     private static Map<String, String> tokenMap = new ConcurrentHashMap<>(32);
 
-    @Value("${jwt.secret}")
     private static String secret;
 
-    @Value("${jwt.expiration}")
     private static Long access_token_expiration;
 
-    @Value("${jwt.expiration}")
     private static Long refresh_token_expiration;
+
+    @Autowired
+    private AuthProperties authProperties;
+
+    @PostConstruct
+    public void init() {
+        secret = authProperties.getJwt().getSecret();
+        access_token_expiration = Long.valueOf(authProperties.getJwt().getExpiration());
+        refresh_token_expiration = Long.valueOf(authProperties.getJwt().getExpiration());
+    }
 
     //jwt签名算法
     private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;

@@ -36,9 +36,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Value("${jwt.expiration}")
-    private int validate;
-
     /**
      * 装载BCrypt密码编码器
      * @return
@@ -83,59 +80,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new GoAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
+                .antMatchers("/auth/login").permitAll()
+                .antMatchers("/**").hasRole("SUPER_ADMIN")
                 .anyRequest().authenticated();
 
         http.exceptionHandling()
                 .and().addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
-
-
-        /*http.authorizeRequests()
-                .antMatchers("/admin/**").hasRole("admin")
-                .antMatchers("/user/**").hasRole("user")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginProcessingUrl("/doLogin")     //登录接口
-                .usernameParameter("username")  //登录用户参数名
-                .passwordParameter("password")  //登录密码参数名
-                .successHandler(((httpServletRequest, httpServletResponse, authentication) -> { //登录成功处理
-                    httpServletResponse.setContentType("application/json;charset=utf-8");
-                    PrintWriter out = httpServletResponse.getWriter();
-                    out.write(new ObjectMapper().writeValueAsString(authentication.getPrincipal()));
-                    out.flush();
-                    out.close();
-                }))
-                .failureHandler(((httpServletRequest, httpServletResponse, e) -> {  //登录失败处理
-                    httpServletResponse.setContentType("application/json;charset=utf-8");
-                    PrintWriter out = httpServletResponse.getWriter();
-                    out.write(new ObjectMapper().writeValueAsString(e.getMessage()));
-                    out.flush();
-                    out.close();
-                }))
-                .permitAll()        //放行相关url
-                .and()
-                .logout()
-//                .logoutUrl("/logout")     //登出接口
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))     //自定义登出接口
-                .logoutSuccessHandler(((httpServletRequest, httpServletResponse, authentication) -> {
-                    httpServletResponse.setContentType("application/json;charset=utf-8");
-                    PrintWriter out = httpServletResponse.getWriter();
-                    out.write(new ObjectMapper().writeValueAsString("登出成功"));
-                    out.flush();
-                    out.close();
-                }))
-                .permitAll()
-                .and()
-                .csrf().disable()
-                .exceptionHandling()    //未认证处理
-                .authenticationEntryPoint(((httpServletRequest, httpServletResponse, e) -> {
-                    httpServletResponse.setContentType("application/json;charset=utf-8");
-                    PrintWriter out = httpServletResponse.getWriter();
-                    out.write(new ObjectMapper().writeValueAsString("尚未登录,请先登录"));
-                    out.flush();
-                    out.close();
-                }));*/
 
     }
 

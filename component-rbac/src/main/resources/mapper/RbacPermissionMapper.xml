@@ -21,6 +21,7 @@
 
     <select id="findByRoleIds" resultMap="BaseResultMap">
         SELECT
+        rp.id, rp.code, rp.name, rp.description, rp.delete_status, rp.created_by, rp.created_time, rp.updated_by, rp.updated_time, rp.version
         FROM rbac_permission rp
             LEFT JOIN rbac_role_permission rrp ON rp.id = rrp.permission_id
         WHERE rp.delete_status = 0 AND rrp.role_id IN

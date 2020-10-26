@@ -29,7 +29,7 @@ import java.util.Collection;
 @Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    @Value("${jwt.header}")
+    @Value("${auth.jwt.header}")
     private String tokenHeader;
 
     @Autowired
