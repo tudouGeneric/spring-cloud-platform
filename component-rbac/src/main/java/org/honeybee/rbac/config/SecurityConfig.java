@@ -1,6 +1,6 @@
 package org.honeybee.rbac.config;
 
-import org.honeybee.rbac.filter.GoAuthenticationEntryPoint;
+import org.honeybee.rbac.handle.GoAuthenticationEntryPoint;
 import org.honeybee.rbac.filter.JwtAuthenticationTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

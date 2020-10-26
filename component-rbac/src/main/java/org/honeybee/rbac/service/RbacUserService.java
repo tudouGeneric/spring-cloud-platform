@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.honeybee.rbac.dto.RbacUserDTO;
 import org.honeybee.rbac.dto.RbacUserSearchDTO;
 import org.honeybee.rbac.entity.RbacUser;
-import org.honeybee.rbac.util.JwtUtil;
+import org.honeybee.rbac.pojo.JwtUser;
 import org.honeybee.rbac.vo.UserVO;
 
 import java.util.List;
@@ -32,10 +32,9 @@ public interface RbacUserService extends IService<RbacUser> {
     /**
      * 根据条件查询用户
      * @param rbacUserSearchDTO
-     * @param page
      * @return
      */
-    IPage<UserVO> find(RbacUserSearchDTO rbacUserSearchDTO, Page page);
+    IPage<UserVO> find(RbacUserSearchDTO rbacUserSearchDTO);
 
     /**
      * 注册用户
@@ -76,6 +75,6 @@ public interface RbacUserService extends IService<RbacUser> {
      * 获取当前用户信息
      * @return
      */
-    JwtUtil getCurrent();
+    JwtUser getCurrent();
 
 }

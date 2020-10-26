@@ -9,6 +9,7 @@ import org.honeybee.base.exception.ServiceException;
 import org.honeybee.rbac.pojo.JwtUser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -26,26 +27,30 @@ public class JwtUtil {
     private static final String CLAIM_KEY_USER_ID = "id";
     private static final String CLAIM_KEY_AUTHORITIES = "scope";
 
-    private Map<String, String> tokenMap = new ConcurrentHashMap<>(32);
+    private static Map<String, String> tokenMap = new ConcurrentHashMap<>(32);
 
     @Value("${jwt.secret}")
-    private String secret;
+    private static String secret;
 
     @Value("${jwt.expiration}")
-    private Long access_token_expiration;
+    private static Long access_token_expiration;
 
     @Value("${jwt.expiration}")
-    private Long refresh_token_expiration;
+    private static Long refresh_token_expiration;
 
     //jwt签名算法
-    private final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
+    private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
 
     /**
      * 获取当前用户
      * @return
      */
-    public static JwtUser getUserInfo() {
-        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public static JwtUser getCurrentUserInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null) {
+            return null;
+        }
+        JwtUser user = (JwtUser) authentication.getPrincipal();
         return user;
     }
 
@@ -54,10 +59,10 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public JwtUser getUserFromToken(String token) {
+    public static JwtUser getUserFromToken(String token) {
         JwtUser userDetail;
         try {
-            final Claims claims = this.getClaimsFromToken(token);
+            final Claims claims = getClaimsFromToken(token);
             Long userId = Long.parseLong(String.valueOf(claims.get(CLAIM_KEY_USER_ID)));
             String userName = String.valueOf(claims.get(CLAIM_KEY_USERNAME));
             String account = claims.getSubject();
@@ -74,10 +79,10 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public long getUserIdFromToken(String token) {
+    public static long getUserIdFromToken(String token) {
         long userId = 0;
         try {
-            final Claims claims = this.getClaimsFromToken(token);
+            final Claims claims = getClaimsFromToken(token);
             userId = Long.parseLong(String.valueOf(claims.get(CLAIM_KEY_USER_ID)));
         } catch (Exception e) {
             throw new ServiceException(HttpStatus.INTERNAL_SERVER_ERROR, "获取用户id异常: " + e);
@@ -90,10 +95,10 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public String getUsernameFromToken(String token) {
+    public static String getUsernameFromToken(String token) {
         String account = null;
         try {
-            final Claims claims = this.getClaimsFromToken(token);
+            final Claims claims = getClaimsFromToken(token);
             account = claims.getSubject();
         } catch (Exception e) {
             throw new ServiceException(HttpStatus.INTERNAL_SERVER_ERROR, "获取用户账号异常: " + e);
@@ -106,7 +111,7 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public Date getCreatedDateFromToken(String token) {
+    public static Date getCreatedDateFromToken(String token) {
         Date created;
         try {
             final Claims claims = getClaimsFromToken(token);
@@ -122,10 +127,10 @@ public class JwtUtil {
      * @param userDetail
      * @return
      */
-    public String generateAccessToken(JwtUser userDetail) {
-        Map<String, Object> claims = this.generateClaims(userDetail);
-        claims.put(CLAIM_KEY_AUTHORITIES, this.authoritiesToArray(userDetail.getAuthorities()));
-        String accessToken = this.generateAccessToken(userDetail.getUsername(), claims);
+    public static String generateAccessToken(JwtUser userDetail) {
+        Map<String, Object> claims = generateClaims(userDetail);
+        claims.put(CLAIM_KEY_AUTHORITIES, authoritiesToArray(userDetail.getAuthorities()));
+        String accessToken = generateAccessToken(userDetail.getUsername(), claims);
         //存储Token
         putToken(userDetail.getUsername(), accessToken);
         return accessToken;
@@ -136,7 +141,7 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public Date getExpirationDateFromToken(String token) {
+    public static Date getExpirationDateFromToken(String token) {
         Date expiration;
         try {
             final Claims claims = getClaimsFromToken(token);
@@ -153,7 +158,7 @@ public class JwtUtil {
      * @param lastPasswordReset
      * @return
      */
-    public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
+    public static Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
         final Date created = getCreatedDateFromToken(token);
         return (!isCreatedBeforeLastPasswordReset(created, lastPasswordReset) && !isTokenExpired(token));
     }
@@ -163,7 +168,7 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public String refreshToken(String token) {
+    public static String refreshToken(String token) {
         String refreshedToken;
         try {
             final Claims claims = getClaimsFromToken(token);
@@ -181,19 +186,19 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public Boolean validateToken(String token) {
+    public static Boolean validateToken(String token) {
         return !isTokenExpired(token);
     }
 
-    public void putToken(String userName, String token) {
+    public static void putToken(String userName, String token) {
         tokenMap.put(userName, token);
     }
 
-    public void deleteToken(String userName) {
+    public static void deleteToken(String userName) {
         tokenMap.remove(userName);
     }
 
-    public boolean containToken(String userName, String token) {
+    public static boolean containToken(String userName, String token) {
         if(userName != null && tokenMap.containsKey(userName) && tokenMap.get(userName).equals(token)) {
             return true;
         }
@@ -206,7 +211,7 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    private Claims getClaimsFromToken(String token) {
+    private static Claims getClaimsFromToken(String token) {
         Claims claims;
         try {
             claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
@@ -216,7 +221,7 @@ public class JwtUtil {
         return claims;
     }
 
-    private Date generateExpirationDate(long expiration) {
+    private static Date generateExpirationDate(long expiration) {
         return new Date(System.currentTimeMillis() + expiration * 1000);
     }
 
@@ -225,8 +230,8 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    private Boolean isTokenExpired(String token) {
-        final Date expiration = this.getExpirationDateFromToken(token);
+    private static Boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
 
@@ -236,11 +241,11 @@ public class JwtUtil {
      * @param lastPasswordReset
      * @return
      */
-    private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
+    private static Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
         return (lastPasswordReset != null && created.before(lastPasswordReset));
     }
 
-    private Map<String, Object> generateClaims(JwtUser userDetail) {
+    private static Map<String, Object> generateClaims(JwtUser userDetail) {
         Map<String, Object> claims = new HashMap<>(16);
         claims.put(CLAIM_KEY_ACCOUNT, userDetail.getUsername());
         claims.put(CLAIM_KEY_USERNAME, userDetail.getName());
@@ -249,8 +254,8 @@ public class JwtUtil {
         return claims;
     }
 
-    private String generateAccessToken(String subject, Map<String, Object> claims) {
-        return this.generateToken(subject, claims, access_token_expiration);
+    private static String generateAccessToken(String subject, Map<String, Object> claims) {
+        return generateToken(subject, claims, access_token_expiration);
     }
 
     /**
@@ -260,19 +265,19 @@ public class JwtUtil {
      * @param expiration
      * @return
      */
-    private String generateToken(String subject, Map<String, Object> claims, long expiration) {
+    private static String generateToken(String subject, Map<String, Object> claims, long expiration) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setId(UUID.randomUUID().toString())
                 .setIssuedAt(new Date())
-                .setExpiration(this.generateExpirationDate(expiration))
+                .setExpiration(generateExpirationDate(expiration))
                 .compressWith(CompressionCodecs.DEFLATE)
                 .signWith(SIGNATURE_ALGORITHM, secret)
                 .compact();
     }
 
-    private Set authoritiesToArray(Collection<? extends GrantedAuthority> authorities) {
+    private static Set authoritiesToArray(Collection<? extends GrantedAuthority> authorities) {
         Set<String> list = new HashSet<>();
         for(GrantedAuthority ga : authorities) {
             list.add(ga.getAuthority());

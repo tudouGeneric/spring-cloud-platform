@@ -11,8 +11,6 @@ public class UserToken {
 
     private Long userId;
 
-    private Long tenanId;
-
     private String name;
 
 }

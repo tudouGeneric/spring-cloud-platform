@@ -2,6 +2,7 @@ package org.honeybee.base.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.honeybee.base.common.ResponseMessage;
+import org.honeybee.base.exception.BussinessException;
 import org.honeybee.base.exception.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -58,12 +59,24 @@ public class ExceptionController {
     }
 
     /**
+     * 捕捉自定义Bussiness异常
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(BussinessException.class)
+    public ResponseMessage customBussinessException(BussinessException e) {
+        e.printStackTrace();
+        log.error("===============" + e.getMessage() + "===============");
+        log.error("异常出现:", e);
+        return ResponseMessage.error(e.getMessage(), e.getStatus());
+    }
+
+    /**
      * 捕捉自定义Service异常
      * @param e
      * @return
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(ServiceException.class)
     public ResponseMessage customServiceException(ServiceException e) {
         e.printStackTrace();
         log.error("===============" + e.getMessage() + "===============");
