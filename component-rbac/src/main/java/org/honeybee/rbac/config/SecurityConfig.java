@@ -1,9 +1,8 @@
 package org.honeybee.rbac.config;
 
-import org.honeybee.rbac.handle.GoAuthenticationEntryPoint;
 import org.honeybee.rbac.filter.JwtAuthenticationTokenFilter;
+import org.honeybee.rbac.handle.CustomAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -75,16 +74,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //使用jwt,关闭session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .httpBasic()
-                //未经过认证的用户访问受保护的资源返回配置
-                .authenticationEntryPoint(new GoAuthenticationEntryPoint())
-                .and()
                 .authorizeRequests()
                 .antMatchers("/auth/login").permitAll()
-                .antMatchers("/**").hasRole("SUPER_ADMIN")
                 .anyRequest().authenticated();
 
         http.exceptionHandling()
+                //未经过认证的用户访问受保护的资源返回配置
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+//无效                .accessDeniedHandler(new CustomAccessDeineHandler())
                 .and().addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
     }

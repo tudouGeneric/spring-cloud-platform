@@ -11,14 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 负责启动未经过身份验证的用户的身份验证过程(当他们试图访问受保护的资源)
+ * 解决匿名用户或token校验失败访问无权限资源时的异常
  */
-public class GoAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
         httpServletResponse.setHeader("Content-type", "application/json;charset=utf-8");
-        ResponseMessage responseMessage = ResponseMessage.error("身份认证失败", HttpStatus.UNAUTHORIZED.value());
+        ResponseMessage responseMessage = ResponseMessage.error("身份验证失败", HttpStatus.UNAUTHORIZED.value());
         httpServletResponse.getWriter().write(JSONUtil.toJsonStr(responseMessage));
         httpServletResponse.getWriter().flush();
     }

@@ -2,14 +2,16 @@ package org.honeybee.base.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.honeybee.base.common.ResponseMessage;
+import org.honeybee.base.constant.BaseConstant;
 import org.honeybee.base.exception.BussinessException;
 import org.honeybee.base.exception.ServiceException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,10 +22,11 @@ import java.util.Map;
 
 
 /**
- * 异常控制处理器
+ * 全局异常处理器
  *
  */
 @RestControllerAdvice
+@Order(BaseConstant.BASE_EXCEPTION_HANDLER_ORDER)
 @Slf4j
 public class ExceptionController {
 
