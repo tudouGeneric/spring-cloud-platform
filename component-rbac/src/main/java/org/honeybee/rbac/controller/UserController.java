@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.honeybee.base.common.ResponseMessage;
+import org.honeybee.base.constant.BaseConstant;
 import org.honeybee.rbac.dto.RbacUserDTO;
 import org.honeybee.rbac.dto.RbacUserSearchDTO;
 import org.honeybee.rbac.service.RbacUserService;
@@ -28,7 +29,7 @@ public class UserController {
     private RbacUserService rbacUserService;
 
     @GetMapping("/all")
-    @PreAuthorize(value = "hasAuthority('USER_LIST_ALL')")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER_LIST_ALL')")
     @ApiOperation(value = "查询所有用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage findAll() {
