@@ -19,6 +19,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class RbacExceptionHandler {
 
     /**
+     * 其他异常： LockedException （账户被锁定）
+     * DisabledException （账户被禁用）
+     */
+
+    /**
      * 捕捉BadCredentialsException 账号密码错误异常
      * @param e
      * @return

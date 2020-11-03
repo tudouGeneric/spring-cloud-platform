@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/page")
-    @PreAuthorize(value = "hasAuthority('USER_LIST_ALL')")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER_LIST_ALL')")
     @ApiOperation(value = "根据条件分页查询用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage find(RbacUserSearchDTO rbacUserSearchDTO) {
@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize(value = "hasAuthority('USER_GET_DETAIL')")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER_GET_DETAIL')")
     @ApiOperation(value = "根据id查询用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage<UserVO> getDetail(@PathVariable Long id) {
@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @GetMapping("/account")
-    @PreAuthorize(value = "hasAuthority('USER_GET_DETAIL')")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER_GET_DETAIL')")
     @ApiOperation(value = "根据账号查询用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage<UserVO> getByAccount(@NotBlank(message = "账号[account不能为空]") String account) {
@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize(value = "hasAuthority('USER_CREATE')")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER_CREATE')")
     @ApiOperation(value = "创建用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage create(@RequestBody @Validated(RbacUserCreateValidGroup.class) RbacUserDTO userDTO) {
@@ -70,7 +70,7 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    @PreAuthorize(value = "hasAuthority('USER_UPDATE')")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER_UPDATE')")
     @ApiOperation(value = "更新用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage update(@RequestBody @Validated(RbacUserUpdateValidGroup.class) RbacUserDTO userDTO) {
@@ -78,7 +78,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize(value = "hasAuthority('USER_DELETE')")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER_DELETE')")
     @ApiOperation(value = "删除用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage delete(@PathVariable Long id) {

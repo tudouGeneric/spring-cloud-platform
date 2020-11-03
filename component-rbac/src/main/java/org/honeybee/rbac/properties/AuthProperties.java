@@ -9,6 +9,11 @@ import org.springframework.stereotype.Component;
 @Data
 public class AuthProperties {
 
+    /**
+     * 忽略校验
+     */
+    private String[] ignores;
+
     private JwtConfig jwt;
 
     @Data
