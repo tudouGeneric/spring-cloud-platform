@@ -4,6 +4,8 @@ spring:
   security:
     basic:
       enable: true  #是否开启spring security基本的鉴权
+  flyway:
+    enabled: true   #是否启用flyway
 
 ##mybatis-plus配置
 mybatis-plus:
@@ -18,11 +20,6 @@ mybatis-plus:
   mapper-locations: classpath:/mapper/*.xml
   typeEnumsPackage: org.honeybee.*.enums  # 配置扫描通用枚举， 支持统配符 * 或者 ; 分割
 
-##flyway配置
-flyway:
-  enable: false
-#  location: classpath:db/migration
-
 ##jwt配置
 auth:
   jwt:
@@ -32,40 +29,9 @@ auth:
     # 不需要鉴权的路径
   ignores:
     - "/"
-    - "/notice/**"
-    - "/excel/**"
-    - "/file/**"
-    - "/pdf/**"
-    - "/user-es/**"
-    - "/quartz/**"
-    - "/test/**"
-    - "/cloud/**"
-    - "/rocket-mq/**"
-    - "/activeMq/**"
-    - "/kaptcha/**"
-    - "/activiti/**"
-    - "/openOffice/**"
-    - "/auth/register"
-    - "/auth/login"
-    - "/auth/logout"
-    - "/api/**"
-    - "/resources/**"
-    - "/templates/**"
-    - "/websocket.html"
-    - "/error.html"
-    - "/kaptcha.html"
-    - "/imgs/**"
-    - "*.css"
-    - "*.js"
-    - "*.gif"
-    - "*.jpg"
-    - "*.png"
-    - "*.ico"
-    - "/favicon.ico"
-    - "/druid/**"
-    - "/public/**"
     - "/swagger-ui.html"
     - "/swagger-resources/**"
     - "/v2/**"
     - "/webjars/**"
     - "/doc.html"
+    - "/api/**"

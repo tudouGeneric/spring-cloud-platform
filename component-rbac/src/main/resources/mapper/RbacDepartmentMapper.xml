@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.honeybee.rbac.mapper.RbacDepartmentMapper">
+
+    <resultMap id="BaseResultMap" type="org.honeybee.rbac.entity.RbacDepartment">
+        <result column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="path" property="path" />
+        <result column="parent_id" property="parentId" />
+        <result column="level" property="level" />
+        <result column="delete_status" property="deleteStatus" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="version" property="version" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, code, name, description, path, parent_id, level, delete_status,
+            created_by, created_time, updated_by, updated_time, version
+    </sql>
+
+    
+</mapper>
