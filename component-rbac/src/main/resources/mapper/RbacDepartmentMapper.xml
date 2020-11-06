@@ -23,5 +23,17 @@
             created_by, created_time, updated_by, updated_time, version
     </sql>
 
+    <select id="findAllLowerLevelByDepartment" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM rbac_department r
+        <where>
+            r.delete_status = '0'
+            <if test="department != null">
+                AND r.path LIKE CONCAT(#{department.path}, '%')
+            </if>
+        </where>
+        ORDER BY r.level
+    </select>
     
 </mapper>

@@ -166,6 +166,14 @@
                 <groupId>com.alibaba</groupId>
                 <version>${fastjson.version}</version>
             </dependency>
+
+            <!-- test -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${web.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

@@ -5,7 +5,7 @@ spring:
     basic:
       enable: true  #是否开启spring security基本的鉴权
   flyway:
-    enabled: true   #是否启用flyway
+    enabled: false   #是否启用flyway
 
 ##mybatis-plus配置
 mybatis-plus:
@@ -28,6 +28,7 @@ auth:
     expiration: 86400 #token有效期一天(秒)
     # 不需要鉴权的路径
   ignores:
+    - "/**"
     - "/"
     - "/swagger-ui.html"
     - "/swagger-resources/**"
