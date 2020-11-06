@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `rbac_department`  (
   `created_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `updated_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `version` bigint(20) NOT NULL COMMENT '版本号',
+  `version` bigint(20) NOT NULL DEFAULT 0 COMMENT '版本号',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '部门表' ROW_FORMAT = Dynamic;
 
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `rbac_user_department`   (
   `created_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `updated_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `version` bigint(20) NOT NULL COMMENT '版本号',
+  `version` bigint(20) NOT NULL DEFAULT 0 COMMENT '版本号',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 

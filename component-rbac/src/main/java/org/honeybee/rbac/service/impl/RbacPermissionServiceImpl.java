@@ -3,6 +3,7 @@ package org.honeybee.rbac.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.honeybee.rbac.entity.RbacPermission;
+import org.honeybee.rbac.enums.PermissionTypeEnum;
 import org.honeybee.rbac.mapper.RbacPermissionMapper;
 import org.honeybee.rbac.service.RbacPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ public class RbacPermissionServiceImpl extends ServiceImpl<RbacPermissionMapper,
     private RbacPermissionMapper rbacPermissionMapper;
 
     @Override
-    public List<RbacPermission> findByRoleIds(List<Long> roleIds) {
-        return rbacPermissionMapper.findByRoleIds(roleIds);
+    public List<RbacPermission> findByRoleIdsAndType(List<Long> roleIds, PermissionTypeEnum typeEnum) {
+        return rbacPermissionMapper.findByRoleIdsAndType(roleIds, typeEnum.getCode());
     }
 
 }

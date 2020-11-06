@@ -4,6 +4,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.honeybee.rbac.entity.RbacPermission;
 import org.honeybee.rbac.entity.RbacRole;
 import org.honeybee.rbac.entity.RbacUser;
+import org.honeybee.rbac.enums.PermissionTypeEnum;
 import org.honeybee.rbac.mapper.RbacPermissionMapper;
 import org.honeybee.rbac.mapper.RbacRoleMapper;
 import org.honeybee.rbac.mapper.RbacUserMapper;
@@ -51,7 +52,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
             authorities.addAll(roleCodes);
             List<Long> roleIds = rbacRoles.stream().map(e -> e.getId()).collect(Collectors.toList());
             //得到用户角色的所有权限
-            List<RbacPermission> permissions = rbacPermissionMapper.findByRoleIds(roleIds);
+            List<RbacPermission> permissions = rbacPermissionMapper.findByRoleIdsAndType(roleIds, PermissionTypeEnum.INTERFACE.getCode());
             Set<String> permissionCodes = permissions.stream().map(e -> e.getCode()).collect(Collectors.toSet());
             if(CollectionUtils.isNotEmpty(permissionCodes)) {
                 authorities.addAll(permissionCodes);
