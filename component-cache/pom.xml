@@ -7,35 +7,29 @@
         <artifactId>spring-cloud-platform</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <name>generic-index</name>
-    <description>启动类及配置文件</description>
+    <name>cache</name>
+    <description>Demo project for Spring Boot</description>
     <packaging>jar</packaging>
 
     <groupId>org.honeybee</groupId>
-    <artifactId>generic-index</artifactId>
+    <artifactId>component-cache</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.honeybee</groupId>
-            <artifactId>component-rbac</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.honeybee</groupId>
-            <artifactId>component-flyway</artifactId>
+            <artifactId>generic-base</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
         </dependency>
 
     </dependencies>

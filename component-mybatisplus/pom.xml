@@ -21,6 +21,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.honeybee</groupId>
+            <artifactId>generic-base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- mybatis-plus -->
         <dependency>
             <groupId>com.baomidou</groupId>

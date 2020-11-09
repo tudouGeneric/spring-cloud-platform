@@ -1,6 +1,8 @@
 package org.honeybee.rbac.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.honeybee.base.constant.BaseConstant;
+import org.honeybee.cache.util.RedisUtil;
 import org.honeybee.rbac.dto.RbacUserDTO;
 import org.honeybee.rbac.pojo.JwtUser;
 import org.honeybee.rbac.service.AuthService;
@@ -59,8 +61,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void logout(String token) {
         String userName = JwtUtil.getUsernameFromToken(token);
-        //清除token存储记录
-        JwtUtil.deleteToken(userName);
+        //清除token
+        if(RedisUtil.exists(BaseConstant.JWT_KEY_START + userName)) {
+            RedisUtil.delete(BaseConstant.JWT_KEY_START + userName);
+        }
     }
 
     @Override

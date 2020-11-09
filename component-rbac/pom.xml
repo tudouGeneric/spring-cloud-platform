@@ -21,6 +21,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.honeybee</groupId>
+            <artifactId>component-cache</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!--spring security-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

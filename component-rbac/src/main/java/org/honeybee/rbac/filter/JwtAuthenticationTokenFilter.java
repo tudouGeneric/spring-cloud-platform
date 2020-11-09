@@ -45,15 +45,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             String username = ((JwtUser) userDetails).getAccount();
             log.info("check authentication " + username);
             if(username != null && jwtTokenUtil.containToken(username, authToken) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                if(jwtTokenUtil.validateToken(authToken)) {     //如果token没有失效
-                    Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    log.info("authentication user " + username + ", setting security context");
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                } else {
-                    throw new ServiceException(HttpStatus.UNAUTHORIZED, "token失效,请重新登录");
-                }
+                Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                log.info("authentication user " + username + ", setting security context");
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
         chain.doFilter(request, response);

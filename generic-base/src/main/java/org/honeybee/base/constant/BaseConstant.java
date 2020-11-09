@@ -11,4 +11,7 @@ public class BaseConstant {
 
     public static final String SUPER_ADMIN_ROLE_AUTHORITY = "hasRole('ROLE_SUPER_ADMIN') or ";
 
+    //Redis中用户token的键key开头
+    public static final String JWT_KEY_START = "TOKEN_";
+
 }

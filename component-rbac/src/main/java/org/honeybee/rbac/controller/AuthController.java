@@ -3,6 +3,7 @@ package org.honeybee.rbac.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.honeybee.base.common.ResponseMessage;
 import org.honeybee.rbac.dto.RbacUserDTO;
 import org.honeybee.rbac.pojo.JwtUser;
@@ -40,6 +41,9 @@ public class AuthController {
     @ApiOperation(value = "用户登出")
     public ResponseMessage logout(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
+        if(StringUtils.isBlank(token)) {
+            return ResponseMessage.fail("获取token失败");
+        }
         authService.logout(token);
         return ResponseMessage.success("登出成功");
     }
@@ -65,6 +69,9 @@ public class AuthController {
     @ApiOperation(value = "刷新token")
     public ResponseMessage<UserToken> refreshAndGetAuthenticationToken(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
+        if(StringUtils.isBlank(token)) {
+            return ResponseMessage.fail("获取token失败");
+        }
         UserToken response = authService.refresh(token);
         if(response == null) {
             return ResponseMessage.fail("刷新失败:token无效");

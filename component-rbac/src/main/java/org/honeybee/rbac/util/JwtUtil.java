@@ -5,11 +5,13 @@ import io.jsonwebtoken.CompressionCodecs;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.honeybee.base.constant.BaseConstant;
+import org.honeybee.base.exception.BussinessException;
 import org.honeybee.base.exception.ServiceException;
+import org.honeybee.cache.util.RedisUtil;
 import org.honeybee.rbac.pojo.JwtUser;
 import org.honeybee.rbac.properties.AuthProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +21,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @Slf4j
@@ -31,13 +32,9 @@ public class JwtUtil {
     private static final String CLAIM_KEY_USER_ID = "id";
     private static final String CLAIM_KEY_AUTHORITIES = "scope";
 
-    private static Map<String, String> tokenMap = new ConcurrentHashMap<>(32);
-
     private static String secret;
 
     private static Long access_token_expiration;
-
-    private static Long refresh_token_expiration;
 
     @Autowired
     private AuthProperties authProperties;
@@ -46,11 +43,22 @@ public class JwtUtil {
     public void init() {
         secret = authProperties.getJwt().getSecret();
         access_token_expiration = Long.valueOf(authProperties.getJwt().getExpiration());
-        refresh_token_expiration = Long.valueOf(authProperties.getJwt().getExpiration());
     }
 
     //jwt签名算法
     private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
+
+    /**
+     * 根据account获取Redis中的token的键
+     * @param account
+     * @return
+     */
+    private static String getUserTokenKey(String account) {
+        if(account == null) {
+            throw new BussinessException("account为空");
+        }
+        return BaseConstant.JWT_KEY_START + account;
+    }
 
     /**
      * 获取当前用户
@@ -144,9 +152,16 @@ public class JwtUtil {
     public static String generateAccessToken(JwtUser userDetail) {
         Map<String, Object> claims = generateClaims(userDetail);
         claims.put(CLAIM_KEY_AUTHORITIES, authoritiesToArray(userDetail.getAuthorities()));
+        //查询该用户是否已经登录
+        Object oldToken = RedisUtil.get(getUserTokenKey(userDetail.getUsername()));
+        if(oldToken != null) {
+            //刷新token
+            return refreshToken(oldToken.toString());
+        }
+
         String accessToken = generateAccessToken(userDetail.getUsername(), claims);
         //存储Token
-        putToken(userDetail.getUsername(), accessToken);
+        RedisUtil.setExpire(getUserTokenKey(userDetail.getUsername()), accessToken, access_token_expiration);
         return accessToken;
     }
 
@@ -188,7 +203,7 @@ public class JwtUtil {
             final Claims claims = getClaimsFromToken(token);
             refreshedToken = generateAccessToken(claims.getSubject(), claims);
             //存储token
-            putToken(claims.getSubject(), refreshedToken);
+            RedisUtil.setExpire(getUserTokenKey(claims.getSubject()), refreshedToken, access_token_expiration);
         } catch (Exception e) {
             refreshedToken = null;
         }
@@ -204,17 +219,11 @@ public class JwtUtil {
         return !isTokenExpired(token);
     }
 
-    public static void putToken(String userName, String token) {
-        tokenMap.put(userName, token);
-    }
-
-    public static void deleteToken(String userName) {
-        tokenMap.remove(userName);
-    }
-
     public static boolean containToken(String userName, String token) {
-        if(userName != null && tokenMap.containsKey(userName) && tokenMap.get(userName).equals(token)) {
-            return true;
+        if(userName != null && RedisUtil.exists(getUserTokenKey(token))) {
+            if(token.equals(RedisUtil.get(getUserTokenKey(token)))) {
+                return true;
+            }
         }
         return false;
     }
