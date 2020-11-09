@@ -11,6 +11,7 @@ import org.honeybee.rbac.properties.AuthProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,11 +58,14 @@ public class JwtUtil {
      */
     public static JwtUser getCurrentUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null) {
-            return null;
+        if(authentication != null) {
+            if(authentication instanceof AnonymousAuthenticationToken) {
+                return null;
+            }
+            JwtUser user = (JwtUser) authentication.getPrincipal();
+            return user;
         }
-        JwtUser user = (JwtUser) authentication.getPrincipal();
-        return user;
+        return null;
     }
 
     /**

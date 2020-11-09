@@ -26,6 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +95,7 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
         //密码加密
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setLastPasswordResetDate(new Date());
         rbacUserMapper.insert(user);
 
         UserVO userVO = new UserVO();

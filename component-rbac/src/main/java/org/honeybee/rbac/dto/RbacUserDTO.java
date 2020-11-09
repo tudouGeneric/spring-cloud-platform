@@ -58,6 +58,7 @@ public class RbacUserDTO {
     /**
      * 昵称
      */
+    @NotBlank(message = "昵称不能为空", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class, RbacUserUpdateValidGroup.class})
     private String nickName;
 
     /**

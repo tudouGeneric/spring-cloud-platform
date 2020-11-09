@@ -1,4 +1,4 @@
-package org.honeybee.rbac.handle;
+package org.honeybee.rbac.handler;
 
 import cn.hutool.json.JSONUtil;
 import org.honeybee.base.common.ResponseMessage;

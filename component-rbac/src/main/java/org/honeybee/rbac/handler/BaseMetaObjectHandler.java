@@ -1,8 +1,9 @@
-package org.honeybee.base.interceptor;
+package org.honeybee.rbac.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
+import org.honeybee.rbac.util.JwtUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -23,20 +24,23 @@ public class BaseMetaObjectHandler implements MetaObjectHandler {
         Object updatedBy = getFieldValByName("updatedBy", metaObject);
         Object updatedTime = getFieldValByName("updatedTime", metaObject);
         Object version = getFieldValByName("version", metaObject);
+
+        String account = JwtUtil.getCurrentUserInfo() == null ? "Anonymous" : JwtUtil.getCurrentUserInfo().getAccount();
+
         if(createdBy == null) {
-            this.setInsertFieldValByName("createdBy", "admin", metaObject);
+            this.setFieldValByName("createdBy", account, metaObject);
         }
         if(createdTime == null) {
-            this.setInsertFieldValByName("createdTime", new Date(), metaObject);
+            this.setFieldValByName("createdTime", new Date(), metaObject);
         }
         if(updatedBy == null) {
-            this.setInsertFieldValByName("updatedBy", "admin", metaObject);
+            this.setFieldValByName("updatedBy", account, metaObject);
         }
         if(updatedTime == null) {
-            this.setInsertFieldValByName("updatedTime", new Date(), metaObject);
+            this.setFieldValByName("updatedTime", new Date(), metaObject);
         }
         if(version == null) {
-            this.setInsertFieldValByName("version", 0L, metaObject);
+            this.setFieldValByName("version", 0L, metaObject);
         }
     }
 
@@ -44,9 +48,11 @@ public class BaseMetaObjectHandler implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
         Long version = (Long) getFieldValByName("version", metaObject);
 
-        this.setUpdateFieldValByName("updatedBy", "admin", metaObject);
-        this.setUpdateFieldValByName("updatedTime", new Date(), metaObject);
-        this.setUpdateFieldValByName("version", version+1, metaObject);
+        String account = JwtUtil.getCurrentUserInfo() == null ? "Anonymous" : JwtUtil.getCurrentUserInfo().getAccount();
+
+        this.setFieldValByName("updatedBy", account, metaObject);
+        this.setFieldValByName("updatedTime", new Date(), metaObject);
+        this.setFieldValByName("version", version == null ? 0L : version+1, metaObject);
     }
 
 }

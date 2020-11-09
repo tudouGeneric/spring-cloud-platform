@@ -1,7 +1,7 @@
 package org.honeybee.rbac.config;
 
 import org.honeybee.rbac.filter.JwtAuthenticationTokenFilter;
-import org.honeybee.rbac.handle.CustomAuthenticationEntryPoint;
+import org.honeybee.rbac.handler.CustomAuthenticationEntryPoint;
 import org.honeybee.rbac.properties.AuthProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
