@@ -20,7 +20,6 @@ public class RedisUtil {
     @Autowired
     private RedisTemplate<String, Object> stringObjectRedisTemplate;
 
-    @Autowired
     private static RedisTemplate<String, Object> redisTemplate;
 
     @PostConstruct
