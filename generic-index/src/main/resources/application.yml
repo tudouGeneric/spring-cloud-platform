@@ -25,7 +25,7 @@ auth:
   jwt:
     header: jwt-token
     secret: mySecret
-    expiration: 86400 #token有效期一天(秒)
+    expiration: 3600 #token有效期一天(秒)
     # 不需要鉴权的路径
   ignores:
     - "/"

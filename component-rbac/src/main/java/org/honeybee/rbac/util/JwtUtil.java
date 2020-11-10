@@ -220,8 +220,8 @@ public class JwtUtil {
     }
 
     public static boolean containToken(String userName, String token) {
-        if(userName != null && RedisUtil.exists(getUserTokenKey(token))) {
-            if(token.equals(RedisUtil.get(getUserTokenKey(token)))) {
+        if(userName != null && RedisUtil.exists(getUserTokenKey(userName))) {
+            if(token.equals(RedisUtil.get(getUserTokenKey(userName)))) {
                 return true;
             }
         }
