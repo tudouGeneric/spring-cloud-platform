@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Order(BaseConstant.RBAC_EXCEPTION_HANDLER_ORDER)
 @Slf4j
-public class RbacExceptionHandler {
+public class RbacExceptionController {
 
     /**
      * 其他异常： LockedException （账户被锁定）
