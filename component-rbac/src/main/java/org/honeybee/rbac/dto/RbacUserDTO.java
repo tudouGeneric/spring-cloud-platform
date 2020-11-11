@@ -34,8 +34,8 @@ public class RbacUserDTO {
     /**
      * 密码
      */
-    @NotBlank(message = "密码不能为空", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class, RbacUserUpdateValidGroup.class, RbacUserLoginValidGroup.class})
-    @Length(min = 1, max = 20, message = "密码长度不能超过20个字符", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class, RbacUserUpdateValidGroup.class})
+    @NotBlank(message = "密码不能为空", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class, RbacUserLoginValidGroup.class})
+    @Length(min = 1, max = 20, message = "密码长度不能超过20个字符", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class})
     private String password;
 
     /**

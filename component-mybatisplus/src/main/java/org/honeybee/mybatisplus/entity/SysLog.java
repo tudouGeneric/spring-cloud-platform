@@ -16,7 +16,7 @@ import java.util.Date;
 @TableName(value = "t_sys_log")
 public class SysLog implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -3912053388457210598L;
 
     /**
      * 主键

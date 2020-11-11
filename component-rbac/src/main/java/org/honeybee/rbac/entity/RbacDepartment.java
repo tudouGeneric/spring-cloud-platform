@@ -6,7 +6,6 @@ import lombok.Data;
 import org.honeybee.base.entity.BaseEntity;
 import org.honeybee.base.enums.DeleteStatusEnum;
 
-import java.beans.Transient;
 import java.util.List;
 
 /**

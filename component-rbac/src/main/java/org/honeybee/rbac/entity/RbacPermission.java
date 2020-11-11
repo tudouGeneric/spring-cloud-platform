@@ -1,10 +1,13 @@
 package org.honeybee.rbac.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.honeybee.base.entity.BaseEntity;
 import org.honeybee.base.enums.DeleteStatusEnum;
 import org.honeybee.rbac.enums.PermissionTypeEnum;
+
+import java.util.List;
 
 /**
  * 权限表
@@ -47,5 +50,14 @@ public class RbacPermission extends BaseEntity {
      * 删除状态（0：未删除 [默认] ；1：已删除）
      */
     private DeleteStatusEnum deleteStatus = DeleteStatusEnum.EXISTED;
+
+    /**
+     * 层级
+     */
+    @TableField(exist = false)
+    private int level;
+
+    @TableField(exist = false)
+    private List<RbacPermission> childList;
 
 }

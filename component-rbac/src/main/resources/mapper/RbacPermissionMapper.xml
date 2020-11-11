@@ -43,4 +43,19 @@
 
     </select>
 
+
+    <select id="listSelfAndChildNodesById" resultType="org.honeybee.rbac.entity.RbacPermission">
+        SELECT u2.id, u2.parent_id, u2.name, u2.code, u2.type, u2.description, u2.config, u1.level
+        FROM(
+            SELECT
+            @ids AS p_ids,
+            (SELECT @ids := GROUP_CONCAT(id) FROM rbac_permission WHERE FIND_IN_SET(parent_id, @ids)) AS c_ids,
+            @l := @l+1 AS level
+            FROM rbac_permission, (SELECT @ids := #{id}, @l := 0) b
+            WHERE @ids IS NOT NULL
+            ) u1
+        JOIN rbac_permission u2
+        ON FIND_IN_SET(u2.id, u1.p_ids)
+    </select>
+
 </mapper>

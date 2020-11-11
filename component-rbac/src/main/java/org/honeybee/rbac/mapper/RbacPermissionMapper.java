@@ -21,4 +21,10 @@ public interface RbacPermissionMapper extends BaseMapper<RbacPermission> {
      */
     List<RbacPermission> findByRoleIdsAndType(@Param("roleIds") List<Long> roleIds, @Param("type") int type);
 
+    /**
+     * 根据权限id查询自身和所有的子节点
+     * @return
+     */
+    List<RbacPermission> listSelfAndChildNodesById(@Param("id") Long id);
+
 }

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.honeybee.base.exception.BussinessException;
 import org.honeybee.base.util.CollectionUtil;
@@ -89,8 +90,17 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
     @Override
     @Transactional
     public UserVO create(RbacUserDTO userDTO) {
+        //校验账号是否重复
+        QueryWrapper queryWrapper = new QueryWrapper<RbacUser>()
+                .eq("account", userDTO.getAccount());
+        List<RbacUser> accountUserList = rbacUserMapper.selectList(queryWrapper);
+        if(CollectionUtils.isNotEmpty(accountUserList)) {
+            throw new BussinessException("账号[" + userDTO.getAccount() + "]已存在");
+        }
+
+        //保存至数据库
         RbacUser user = new RbacUser();
-        BeanUtils.copyProperties(userDTO, user);
+        BeanUtils.copyProperties(userDTO, user, "id");
 
         //密码加密
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -113,7 +123,7 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
 
         //拷贝属性值, 忽略空值和特定属性值
         BeanUtil.copyProperties(userDTO, rbacUser, CopyOptions.create().ignoreNullValue()
-                .setIgnoreProperties("id", "account"));
+                .setIgnoreProperties("id", "account", "password"));
         int result = rbacUserMapper.updateById(rbacUser);
         if(result != 1) {
             throw new BussinessException("更新用户失败");

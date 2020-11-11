@@ -1,6 +1,7 @@
 package org.honeybee.rbac.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.honeybee.rbac.dto.RbacRoleDTO;
 import org.honeybee.rbac.entity.RbacRole;
 
 import java.util.List;
@@ -16,5 +17,7 @@ public interface RbacRoleService extends IService<RbacRole> {
      * @return
      */
     List<RbacRole> findByUserId(Long userId);
+
+    RbacRole create(RbacRoleDTO rbacRoleDTO);
 
 }

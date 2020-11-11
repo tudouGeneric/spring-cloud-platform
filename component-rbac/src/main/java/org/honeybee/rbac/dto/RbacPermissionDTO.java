@@ -4,6 +4,7 @@ import lombok.Data;
 import org.honeybee.rbac.enums.PermissionTypeEnum;
 import org.honeybee.rbac.valid.group.RbacPermissionCreateValidGroup;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -19,6 +20,7 @@ public class RbacPermissionDTO {
      * 父id
      */
     @NotNull(message = "父id[parentId]不能为空", groups = {RbacPermissionCreateValidGroup.class})
+    @Min(value = 0, message = "父id[parentId]不能小于0",groups = {RbacPermissionCreateValidGroup.class})
     private Long parentId;
 
     /**
