@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.honeybee.rbac.mapper.RbacRolePermissionMapper">
+
+    <delete id="deleteByPermissionIds">
+        DELETE FROM rbac_role_permission
+            WHERE permission_id IN
+            <foreach collection="permissionIds" index="index" item="permissionId" open="(" separator="," close=")">
+                #{permissionId}
+            </foreach>
+    </delete>
+
+
+</mapper>

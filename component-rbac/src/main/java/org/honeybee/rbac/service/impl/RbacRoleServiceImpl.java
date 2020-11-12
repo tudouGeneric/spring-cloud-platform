@@ -12,6 +12,7 @@ import org.honeybee.rbac.service.RbacRoleService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class RbacRoleServiceImpl extends ServiceImpl<RbacRoleMapper, RbacRole> i
     }
 
     @Override
+    @Transactional
     public RbacRole create(RbacRoleDTO rbacRoleDTO) {
         //校验code不能重复
         rbacRoleDTO.setCode(rbacRoleDTO.getCode().toUpperCase());

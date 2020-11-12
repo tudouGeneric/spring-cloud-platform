@@ -10,13 +10,18 @@ import org.honeybee.rbac.dto.RbacPermissionDTO;
 import org.honeybee.rbac.entity.RbacPermission;
 import org.honeybee.rbac.enums.PermissionTypeEnum;
 import org.honeybee.rbac.mapper.RbacPermissionMapper;
+import org.honeybee.rbac.mapper.RbacRolePermissionMapper;
 import org.honeybee.rbac.service.RbacPermissionService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -25,12 +30,16 @@ public class RbacPermissionServiceImpl extends ServiceImpl<RbacPermissionMapper,
     @Autowired
     private RbacPermissionMapper rbacPermissionMapper;
 
+    @Autowired
+    private RbacRolePermissionMapper rbacRolePermissionMapper;
+
     @Override
     public List<RbacPermission> findByRoleIdsAndType(List<Long> roleIds, PermissionTypeEnum typeEnum) {
         return rbacPermissionMapper.findByRoleIdsAndType(roleIds, typeEnum.getCode());
     }
 
     @Override
+    @Transactional
     public RbacPermission create(RbacPermissionDTO rbacPermissionDTO) {
         //校验逻辑
         Long parentId = rbacPermissionDTO.getParentId();
@@ -61,12 +70,19 @@ public class RbacPermissionServiceImpl extends ServiceImpl<RbacPermissionMapper,
     }
 
     @Override
+    @Transactional
     public ResultVO deletePermissions(List<Long> permissionIds) {
+        //最终要删除的权限id集合
+        Set<Long> permissionIdSet = new HashSet<>();
         for(Long permissionId : permissionIds) {
-             rbacPermissionMapper.listSelfAndChildNodesById(permissionId);
+            //查询自身和所有子节点的权限
+            List<RbacPermission> permissions = rbacPermissionMapper.listSelfAndChildNodesById(permissionId);
+            List<Long> permissionIdList = permissions.stream().map(e -> e.getId()).collect(Collectors.toList());
+            permissionIdSet.addAll(permissionIdList);
         }
 
-
+        //删除角色权限关联表数据
+//        rbacRolePermissionMapper.delete();
 
         return null;
     }
