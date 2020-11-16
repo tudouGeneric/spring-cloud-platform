@@ -10,5 +10,13 @@
             </foreach>
     </delete>
 
+    <delete id="deleteByRoleIds">
+        DELETE FROM rbac_role_permission
+            WHERE role_id IN
+            <foreach collection="roleIds" index="index" item="roleId" open="(" separator="," close=")">
+                #{roleId}
+            </foreach>
+    </delete>
+
 
 </mapper>

@@ -81,10 +81,16 @@ public class RbacPermissionServiceImpl extends ServiceImpl<RbacPermissionMapper,
             permissionIdSet.addAll(permissionIdList);
         }
 
-        //删除角色权限关联表数据
-//        rbacRolePermissionMapper.delete();
+        if(CollectionUtils.isEmpty(permissionIdSet)) {
+            return new ResultVO(false, "删除的权限为空");
+        }
 
-        return null;
+        //删除角色权限关联表数据
+        rbacRolePermissionMapper.deleteByPermissionIds(permissionIdSet);
+        //删除权限表数据
+        rbacPermissionMapper.deleteBatchIds(permissionIdSet);
+
+        return new ResultVO(true, "删除成功");
     }
 
     @Override

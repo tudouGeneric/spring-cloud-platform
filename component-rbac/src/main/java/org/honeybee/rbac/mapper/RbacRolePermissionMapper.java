@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.honeybee.rbac.entity.RbacRolePermission;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public interface RbacRolePermissionMapper extends BaseMapper<RbacRolePermission>
      * 根据权限id集合删除
      * @param permissionIds
      */
-    void deleteByPermissionIds(@Param("permissionIds") List<Long> permissionIds);
+    void deleteByPermissionIds(@Param("permissionIds") Collection<Long> permissionIds);
 
     /**
      * 根据角色id集合删除

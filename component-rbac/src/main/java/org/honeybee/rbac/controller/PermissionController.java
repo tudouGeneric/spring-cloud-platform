@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;
 import org.honeybee.base.common.ResponseMessage;
 import org.honeybee.base.constant.BaseConstant;
+import org.honeybee.base.vo.ResultVO;
 import org.honeybee.rbac.dto.RbacPermissionDTO;
 import org.honeybee.rbac.service.RbacPermissionService;
 import org.honeybee.rbac.valid.group.RbacPermissionCreateValidGroup;
@@ -39,8 +40,12 @@ public class PermissionController {
     @ApiOperation(value = "删除权限(包括权限的子节点)")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage delete(List<Long> permissionIds) {
-
-        return null;
+        ResultVO result = permissionService.deletePermissions(permissionIds);
+        if(result.getFlag()) {
+            return ResponseMessage.success(result.getMessage());
+        } else {
+            return ResponseMessage.fail(result.getMessage());
+        }
     }
 
     @GetMapping("/listSelfAndChildNodes")

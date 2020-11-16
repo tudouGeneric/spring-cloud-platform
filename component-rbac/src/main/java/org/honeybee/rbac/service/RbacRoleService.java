@@ -1,6 +1,7 @@
 package org.honeybee.rbac.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.honeybee.base.vo.ResultVO;
 import org.honeybee.rbac.dto.RbacRoleDTO;
 import org.honeybee.rbac.entity.RbacRole;
 
@@ -19,5 +20,12 @@ public interface RbacRoleService extends IService<RbacRole> {
     List<RbacRole> findByUserId(Long userId);
 
     RbacRole create(RbacRoleDTO rbacRoleDTO);
+
+    /**
+     * 删除角色
+     * @param roleIds role_id集合
+     * @return
+     */
+    ResultVO deleteRoles(List<Long> roleIds);
 
 }
