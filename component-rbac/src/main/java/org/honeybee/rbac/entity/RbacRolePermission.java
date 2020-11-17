@@ -22,4 +22,12 @@ public class RbacRolePermission {
     @TableField(value = "permission_id")
     private Long permissionId;
 
+    public RbacRolePermission() {
+    }
+
+    public RbacRolePermission(Long roleId, Long permissionId) {
+        this.roleId = roleId;
+        this.permissionId = permissionId;
+    }
+
 }

@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.honeybee.base.common.ResponseMessage;
 import org.honeybee.base.constant.BaseConstant;
+import org.honeybee.base.vo.ResultVO;
+import org.honeybee.rbac.dto.AttachUserRoleDTO;
 import org.honeybee.rbac.dto.RbacUserDTO;
 import org.honeybee.rbac.dto.RbacUserSearchDTO;
 import org.honeybee.rbac.service.RbacUserService;
@@ -29,24 +31,24 @@ public class UserController {
     private RbacUserService rbacUserService;
 
     @GetMapping("/all")
-    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER_LIST_ALL')")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER')")
     @ApiOperation(value = "查询所有用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage findAll() {
         return ResponseMessage.success(null, rbacUserService.findAll());
     }
 
-    @GetMapping("/page")
-    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER_LIST_ALL')")
+    @PostMapping("/page")
+    @PreAuthorize(value = "isAuthenticated()")
     @ApiOperation(value = "根据条件分页查询用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
-    public ResponseMessage find(RbacUserSearchDTO rbacUserSearchDTO) {
+    public ResponseMessage find(@RequestBody RbacUserSearchDTO rbacUserSearchDTO) {
         IPage<UserVO> pageResult = rbacUserService.find(rbacUserSearchDTO);
         return ResponseMessage.success(null, pageResult);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER_GET_DETAIL')")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER')")
     @ApiOperation(value = "根据id查询用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage<UserVO> getDetail(@PathVariable Long id) {
@@ -54,7 +56,7 @@ public class UserController {
     }
 
     @GetMapping("/account")
-    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER_GET_DETAIL')")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER')")
     @ApiOperation(value = "根据账号查询用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage<UserVO> getByAccount(@NotBlank(message = "账号[account不能为空]") String account) {
@@ -62,7 +64,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER_CREATE')")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER')")
     @ApiOperation(value = "创建用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage create(@RequestBody @Validated(RbacUserCreateValidGroup.class) RbacUserDTO userDTO) {
@@ -70,7 +72,7 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER_UPDATE')")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER')")
     @ApiOperation(value = "更新用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage update(@RequestBody @Validated(RbacUserUpdateValidGroup.class) RbacUserDTO userDTO) {
@@ -78,11 +80,20 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER_DELETE')")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER')")
     @ApiOperation(value = "删除用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage delete(@PathVariable Long id) {
         return ResponseMessage.success("删除成功", rbacUserService.delete(id));
+    }
+
+    @PostMapping("/attachUserRoles")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER')")
+    @ApiOperation(value = "给用户分配角色")
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
+    public ResponseMessage attachUserRoles(@RequestBody @Validated AttachUserRoleDTO attachUserRoleDTO) {
+        ResultVO result = rbacUserService.attachUserRoles(attachUserRoleDTO);
+        return ResultVO.getResponseMessage(result);
     }
 
 }

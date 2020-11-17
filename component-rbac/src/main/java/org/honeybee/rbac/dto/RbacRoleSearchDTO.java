@@ -4,15 +4,15 @@ import cn.hutool.db.Page;
 import lombok.Data;
 
 @Data
-public class RbacUserSearchDTO extends Page {
+public class RbacRoleSearchDTO extends Page {
 
     /**
-     * 账号
+     * 编号
      */
-    private String account;
+    private String code;
 
     /**
-     * 姓名
+     * 名称
      */
     private String name;
 

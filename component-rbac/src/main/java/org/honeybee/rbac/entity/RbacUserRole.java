@@ -22,4 +22,12 @@ public class RbacUserRole {
     @TableField(value = "role_id")
     private Long roleId;
 
+    public RbacUserRole() {
+    }
+
+    public RbacUserRole(Long userId, Long roleId) {
+        this.userId = userId;
+        this.roleId = roleId;
+    }
+
 }

@@ -2,6 +2,7 @@ package org.honeybee.rbac.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.honeybee.base.enums.DeleteStatusEnum;
 import org.honeybee.base.enums.SexEnum;
 
 import java.util.Date;
@@ -54,5 +55,10 @@ public class UserVO {
      * 头像地址
      */
     private String photoUrl;
+
+    /**
+     * 删除状态
+     */
+    private DeleteStatusEnum deleteStatus;
 
 }

@@ -3,6 +3,8 @@ package org.honeybee.rbac.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.honeybee.base.vo.ResultVO;
+import org.honeybee.rbac.dto.AttachUserRoleDTO;
 import org.honeybee.rbac.dto.RbacUserDTO;
 import org.honeybee.rbac.dto.RbacUserSearchDTO;
 import org.honeybee.rbac.entity.RbacUser;
@@ -76,5 +78,7 @@ public interface RbacUserService extends IService<RbacUser> {
      * @return
      */
     JwtUser getCurrent();
+
+    ResultVO attachUserRoles(AttachUserRoleDTO attachUserRoleDTO);
 
 }

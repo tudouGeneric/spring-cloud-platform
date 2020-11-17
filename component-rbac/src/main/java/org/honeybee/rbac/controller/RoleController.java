@@ -4,10 +4,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Param;
 import org.honeybee.base.common.ResponseMessage;
 import org.honeybee.base.constant.BaseConstant;
 import org.honeybee.base.vo.ResultVO;
+import org.honeybee.rbac.dto.AttachRolePermissionDTO;
 import org.honeybee.rbac.dto.RbacRoleDTO;
+import org.honeybee.rbac.dto.RbacRoleSearchDTO;
 import org.honeybee.rbac.service.RbacRoleService;
 import org.honeybee.rbac.valid.group.RbacRoleCreateValidGroup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +40,35 @@ public class RoleController {
     @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('ROLE')")
     @ApiOperation(value = "删除角色")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
-    public ResponseMessage delete(List<Long> roleIds) {
+    public ResponseMessage delete(@RequestBody List<Long> roleIds) {
         ResultVO result = rbacRoleService.deleteRoles(roleIds);
-        if(result.getFlag()) {
-            return ResponseMessage.success(result.getMessage());
-        } else {
-            return ResponseMessage.fail(result.getMessage());
-        }
+        return ResultVO.getResponseMessage(result);
     }
 
+    @GetMapping("/listPermissionsByRoleId")
+    @PreAuthorize(value = "isAuthenticated()")
+    @ApiOperation(value = "根据角色id查询所拥有的权限")
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
+    public ResponseMessage listPermissionsByRoleId(@Param("id") Long id) {
+        return ResponseMessage.success("查询成功", rbacRoleService.listPermissionsByRoleId(id));
+    }
+
+    @PostMapping("/attachRolePermissions")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('ROLE')")
+    @ApiOperation(value = "给角色分配权限")
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
+    public ResponseMessage attachRolePermissions(@RequestBody @Validated AttachRolePermissionDTO attachRolePermissionDTO) {
+        ResultVO result = rbacRoleService.attachRolePermissions(attachRolePermissionDTO.getRoleId(), attachRolePermissionDTO.getPermissionIds());
+        return ResultVO.getResponseMessage(result);
+    }
+
+
+    @PostMapping("/page")
+    @PreAuthorize(value = "isAuthenticated()")
+    @ApiOperation(value = "根据条件分页查询角色")
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
+    public ResponseMessage find(RbacRoleSearchDTO roleSearchDTO) {
+        return ResponseMessage.success(null, rbacRoleService.find(roleSearchDTO));
+    }
 
 }

@@ -39,17 +39,13 @@ public class PermissionController {
     @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('PERMISSION')")
     @ApiOperation(value = "删除权限(包括权限的子节点)")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
-    public ResponseMessage delete(List<Long> permissionIds) {
+    public ResponseMessage delete(@RequestBody List<Long> permissionIds) {
         ResultVO result = permissionService.deletePermissions(permissionIds);
-        if(result.getFlag()) {
-            return ResponseMessage.success(result.getMessage());
-        } else {
-            return ResponseMessage.fail(result.getMessage());
-        }
+        return ResultVO.getResponseMessage(result);
     }
 
     @GetMapping("/listSelfAndChildNodes")
-    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('PERMISSION')")
+    @PreAuthorize(value = "isAuthenticated()")
     @ApiOperation(value = "根据id查询自身和所有子节点的树")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage listSelfAndChildNodes(@Param("id") Long id) {

@@ -2,6 +2,8 @@ package org.honeybee.rbac.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.db.sql.Direction;
+import cn.hutool.db.sql.Order;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,9 +13,12 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.honeybee.base.exception.BussinessException;
 import org.honeybee.base.util.CollectionUtil;
+import org.honeybee.base.vo.ResultVO;
+import org.honeybee.rbac.dto.AttachUserRoleDTO;
 import org.honeybee.rbac.dto.RbacUserDTO;
 import org.honeybee.rbac.dto.RbacUserSearchDTO;
 import org.honeybee.rbac.entity.RbacUser;
+import org.honeybee.rbac.entity.RbacUserRole;
 import org.honeybee.rbac.mapper.RbacRoleMapper;
 import org.honeybee.rbac.mapper.RbacUserMapper;
 import org.honeybee.rbac.mapper.RbacUserRoleMapper;
@@ -27,10 +32,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -71,6 +73,15 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
         }
         if(StringUtils.isNotBlank(rbacUserSearchDTO.getName())) {
             wrapper.like("name", rbacUserSearchDTO.getName());
+        }
+        if(rbacUserSearchDTO.getOrders() != null) {
+            for(Order order : rbacUserSearchDTO.getOrders()) {
+                boolean asc = true;
+                if(order.getDirection() != null && order.getDirection().equals(Direction.DESC)) {
+                    asc = false;
+                }
+                wrapper.orderBy(true, asc, order.getField());
+            }
         }
 
         Page page = new Page(rbacUserSearchDTO.getPageNumber(), rbacUserSearchDTO.getPageSize());
@@ -164,4 +175,16 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
         return JwtUtil.getCurrentUserInfo();
     }
 
+    @Override
+    public ResultVO attachUserRoles(AttachUserRoleDTO attachUserRoleDTO) {
+        //删除原来的用户角色关联
+        rbacUserRoleMapper.deleteByUserIds(Arrays.asList(attachUserRoleDTO.getUserId()));
+        //新增绑定的角色
+        for(Long roleId : attachUserRoleDTO.getRoleIds()) {
+            RbacUserRole userRole = new RbacUserRole(attachUserRoleDTO.getUserId(), roleId);
+            rbacUserRoleMapper.insert(userRole);
+        }
+
+        return new ResultVO(true, "成功");
+    }
 }

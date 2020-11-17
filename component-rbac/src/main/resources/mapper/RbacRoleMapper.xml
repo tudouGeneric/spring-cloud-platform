@@ -33,7 +33,7 @@
         SELECT
             rr.id, rr.code, rr.name
         FROM rbac_role rr
-            LEFT JOIN rbac_user_role rur ON rr.id = rur.role_id
+            JOIN rbac_user_role rur ON rr.id = rur.role_id
         WHERE rr.delete_status = 0 AND rur.user_id = #{userId}
     </select>
 
