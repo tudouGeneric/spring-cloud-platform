@@ -6,6 +6,7 @@ import lombok.Data;
 import org.honeybee.base.entity.BaseEntity;
 import org.honeybee.base.enums.DeleteStatusEnum;
 import org.honeybee.base.enums.SexEnum;
+import org.honeybee.rbac.enums.UserEnableEnum;
 
 import java.util.Date;
 import java.util.Set;
@@ -48,6 +49,12 @@ public class RbacUser extends BaseEntity {
     private String password;
 
     /**
+     * 部门id
+     */
+    @TableField(value = "department_id")
+    private Long departmentId;
+
+    /**
      * 昵称
      */
     @TableField(value = "nick_name")
@@ -72,6 +79,11 @@ public class RbacUser extends BaseEntity {
      * 密码最后次更新时间
      */
     private Date lastPasswordResetDate;
+
+    /**
+     * 是否启用(0:禁用; 1:启用)
+     */
+    private UserEnableEnum enable = UserEnableEnum.ENABLE;
 
     /**
      * 删除状态（0：未删除 [默认] ；1：已删除）
