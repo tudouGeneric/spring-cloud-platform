@@ -1,6 +1,8 @@
 package org.honeybee.rbac.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.honeybee.base.vo.ResultVO;
+import org.honeybee.rbac.dto.RbacDepartmentDTO;
 import org.honeybee.rbac.entity.RbacDepartment;
 
 import java.util.List;
@@ -15,5 +17,12 @@ public interface RbacDepartmentService extends IService<RbacDepartment> {
      * @param departmentId
      */
     List<RbacDepartment> getDepartmentTree(Long departmentId);
+
+    /**
+     * 创建部门
+     * @param departmentDTO
+     * @return
+     */
+    ResultVO create(RbacDepartmentDTO departmentDTO);
 
 }

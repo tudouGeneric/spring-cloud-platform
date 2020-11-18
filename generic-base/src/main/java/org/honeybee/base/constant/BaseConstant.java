@@ -14,4 +14,7 @@ public class BaseConstant {
     //Redis中用户token的键key开头
     public static final String JWT_KEY_START = "TOKEN_";
 
+    //部门path字段分隔符
+    public static final String RBAC_DEPAERMENT_PATH_BREAK = "_";
+
 }
