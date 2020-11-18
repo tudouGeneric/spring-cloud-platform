@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.honeybee.base.enums.DeleteStatusEnum;
 import org.honeybee.base.enums.SexEnum;
+import org.honeybee.rbac.enums.UserEnableEnum;
 
 import java.util.Date;
 
 @Data
 public class UserVO {
+
+    private Long id;
 
     /**
      * 姓名
@@ -37,6 +40,16 @@ public class UserVO {
     private Date birth;
 
     /**
+     * 部门id
+     */
+    private Long departmentId;
+
+    /**
+     * 部门名称
+     */
+    private String departmentName;
+
+    /**
      * 昵称
      */
     private String nickName;
@@ -55,6 +68,11 @@ public class UserVO {
      * 头像地址
      */
     private String photoUrl;
+
+    /**
+     * 是否启用
+     */
+    private UserEnableEnum enable;
 
     /**
      * 删除状态

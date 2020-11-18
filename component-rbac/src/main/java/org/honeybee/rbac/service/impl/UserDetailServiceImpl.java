@@ -5,11 +5,13 @@ import org.honeybee.rbac.entity.RbacPermission;
 import org.honeybee.rbac.entity.RbacRole;
 import org.honeybee.rbac.entity.RbacUser;
 import org.honeybee.rbac.enums.PermissionTypeEnum;
+import org.honeybee.rbac.enums.UserEnableEnum;
 import org.honeybee.rbac.mapper.RbacPermissionMapper;
 import org.honeybee.rbac.mapper.RbacRoleMapper;
 import org.honeybee.rbac.mapper.RbacUserMapper;
 import org.honeybee.rbac.pojo.JwtUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,6 +43,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
         RbacUser rbacUser = rbacUserMapper.getByAccount(account);
         if(rbacUser == null) {
             throw new UsernameNotFoundException(account + ":该账号用户不存在");
+        }
+        if(rbacUser.getEnable() == null || !rbacUser.getEnable().equals(UserEnableEnum.ENABLE)) {
+            throw new DisabledException(account + ":该账号被禁用");
         }
         //角色code和权限code添加到authorities中
         Set<String> authorities = new HashSet<>();

@@ -2,24 +2,23 @@ package org.honeybee.rbac.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import cn.hutool.db.sql.Direction;
-import cn.hutool.db.sql.Order;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.honeybee.base.exception.BussinessException;
-import org.honeybee.base.util.CollectionUtil;
 import org.honeybee.base.vo.ResultVO;
+import org.honeybee.mybatisplus.util.PageUtil;
 import org.honeybee.rbac.dto.AttachUserRoleDTO;
 import org.honeybee.rbac.dto.RbacUserDTO;
 import org.honeybee.rbac.dto.RbacUserSearchDTO;
+import org.honeybee.rbac.entity.RbacDepartment;
 import org.honeybee.rbac.entity.RbacUser;
 import org.honeybee.rbac.entity.RbacUserRole;
-import org.honeybee.rbac.mapper.RbacRoleMapper;
+import org.honeybee.rbac.enums.UserEnableEnum;
+import org.honeybee.rbac.mapper.RbacDepartmentMapper;
 import org.honeybee.rbac.mapper.RbacUserMapper;
 import org.honeybee.rbac.mapper.RbacUserRoleMapper;
 import org.honeybee.rbac.pojo.JwtUser;
@@ -32,7 +31,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -42,53 +43,16 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
     private RbacUserMapper rbacUserMapper;
 
     @Autowired
-    private RbacRoleMapper rbacRoleMapper;
-
-    @Autowired
     private RbacUserRoleMapper rbacUserRoleMapper;
 
-    @Override
-    public UserVO getByAccount(String account) {
-        UserVO userVO = new UserVO();
-        RbacUser rbacUser = rbacUserMapper.getByAccount(account);
-        if(userVO == null) {
-            throw new BussinessException("用户不存在");
-        }
-
-        BeanUtil.copyProperties(rbacUser, userVO);
-        return userVO;
-    }
-
-    @Override
-    public List<UserVO> findAll() {
-        List<RbacUser> users = rbacUserMapper.selectList(null);
-        return CollectionUtil.copyList(users, UserVO.class);
-    }
+    @Autowired
+    private RbacDepartmentMapper rbacDepartmentMapper;
 
     @Override
     public IPage<UserVO> find(RbacUserSearchDTO rbacUserSearchDTO) {
-        QueryWrapper<RbacUser> wrapper = new QueryWrapper<>();
-        if(StringUtils.isNotBlank(rbacUserSearchDTO.getAccount())) {
-            wrapper.eq("account", rbacUserSearchDTO.getAccount());
-        }
-        if(StringUtils.isNotBlank(rbacUserSearchDTO.getName())) {
-            wrapper.like("name", rbacUserSearchDTO.getName());
-        }
-        if(rbacUserSearchDTO.getOrders() != null) {
-            for(Order order : rbacUserSearchDTO.getOrders()) {
-                boolean asc = true;
-                if(order.getDirection() != null && order.getDirection().equals(Direction.DESC)) {
-                    asc = false;
-                }
-                wrapper.orderBy(true, asc, order.getField());
-            }
-        }
-
-        Page page = new Page(rbacUserSearchDTO.getPageNumber(), rbacUserSearchDTO.getPageSize());
-        IPage<UserVO> rbacUserPage = rbacUserMapper.selectPage(page, wrapper);
-        List<UserVO> userVOList = CollectionUtil.copyList(rbacUserPage.getRecords(), UserVO.class);
-        rbacUserPage.setRecords(userVOList);
-        return rbacUserPage;
+        Page page = PageUtil.buildPage(rbacUserSearchDTO);
+        IPage<UserVO> result = rbacUserMapper.listUserByPage(page, rbacUserSearchDTO);
+        return result;
     }
 
     @Override
@@ -108,6 +72,14 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
         if(CollectionUtils.isNotEmpty(accountUserList)) {
             throw new BussinessException("账号[" + userDTO.getAccount() + "]已存在");
         }
+        //校验部门是否存在
+        QueryWrapper deptWrapper = new QueryWrapper<RbacDepartment>()
+                .eq("delete_status", 0)
+                .eq("id", userDTO.getDepartmentId());
+        RbacDepartment department = rbacDepartmentMapper.selectOne(deptWrapper);
+        if(department == null) {
+            throw new BussinessException("部门不存在");
+        }
 
         //保存至数据库
         RbacUser user = new RbacUser();
@@ -126,10 +98,10 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
 
     @Override
     @Transactional
-    public int update(RbacUserDTO userDTO) {
+    public ResultVO update(RbacUserDTO userDTO) {
         RbacUser rbacUser = rbacUserMapper.selectById(userDTO.getId());
         if(rbacUser == null) {
-            throw new BussinessException("用户不存在");
+            return new ResultVO(false, "用户不存在");
         }
 
         //拷贝属性值, 忽略空值和特定属性值
@@ -139,35 +111,27 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
         if(result != 1) {
             throw new BussinessException("更新用户失败");
         }
-        return result;
+        return new ResultVO(true, "更新成功");
     }
 
     @Override
     @Transactional
-    public int delete(Long userId) {
-        //删除用户
-        int result = rbacUserMapper.deleteById(userId);
-        //删除用户相关角色
-        Map deleteMap = new HashMap() {{
-            put("user_id", userId);
-        }};
-        rbacUserRoleMapper.deleteByMap(deleteMap);
-        if(result != 1) {
-            throw new BussinessException("删除用户失败");
+    public ResultVO delete(List<Long> userIds) {
+        //逻辑删除用户
+        if(CollectionUtils.isEmpty(userIds)) {
+            return new ResultVO(false, "删除的用户为空");
         }
-        return result;
+        rbacUserMapper.deleteByUserIds(userIds);
+        return new ResultVO(true, "删除成功");
     }
 
     @Override
     public UserVO getById(Long userId) {
-        RbacUser rbacUser = rbacUserMapper.selectById(userId);
-        if(rbacUser == null) {
+        UserVO user = rbacUserMapper.findById(userId);
+        if(user == null) {
             throw new BussinessException("用户不存在");
         }
-
-        UserVO vo = new UserVO();
-        BeanUtils.copyProperties(rbacUser, vo);
-        return vo;
+        return user;
     }
 
     @Override
@@ -187,4 +151,15 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
 
         return new ResultVO(true, "成功");
     }
+
+    @Override
+    public ResultVO updateUsersEnableStatus(List<Long> userIds, UserEnableEnum enableEnum) {
+        if(CollectionUtils.isEmpty(userIds)) {
+            return new ResultVO(false, enableEnum.getDescp() + "的用户为空");
+        }
+
+        rbacUserMapper.updateEnableByUserIds(userIds, enableEnum.getCode());
+        return new ResultVO(true,  enableEnum.getDescp() + "成功");
+    }
+
 }

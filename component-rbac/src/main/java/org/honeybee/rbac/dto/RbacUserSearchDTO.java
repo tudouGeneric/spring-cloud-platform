@@ -16,4 +16,14 @@ public class RbacUserSearchDTO extends Page {
      */
     private String name;
 
+    /**
+     * 部门id
+     */
+    private Long departmentId;
+
+    /**
+     * 部门名称
+     */
+    private String departmentName;
+
 }

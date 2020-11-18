@@ -8,6 +8,7 @@ import org.honeybee.rbac.dto.AttachUserRoleDTO;
 import org.honeybee.rbac.dto.RbacUserDTO;
 import org.honeybee.rbac.dto.RbacUserSearchDTO;
 import org.honeybee.rbac.entity.RbacUser;
+import org.honeybee.rbac.enums.UserEnableEnum;
 import org.honeybee.rbac.pojo.JwtUser;
 import org.honeybee.rbac.vo.UserVO;
 
@@ -17,19 +18,6 @@ import java.util.List;
  * 用户 Service接口
  */
 public interface RbacUserService extends IService<RbacUser> {
-
-    /**
-     * 根据账号获取用户
-     * @param account
-     * @return
-     */
-    UserVO getByAccount(String account);
-
-    /**
-     * 查询所有用户
-     * @return
-     */
-    List<UserVO> findAll();
 
     /**
      * 根据条件查询用户
@@ -57,14 +45,14 @@ public interface RbacUserService extends IService<RbacUser> {
      * @param userDTO
      * @return
      */
-    int update(RbacUserDTO userDTO);
+    ResultVO update(RbacUserDTO userDTO);
 
     /**
-     * 删除用户
-     * @param userId
+     * 批量删除用户
+     * @param userIds
      * @return
      */
-    int delete(Long userId);
+    ResultVO delete(List<Long> userIds);
 
     /**
      * 根据id获取用户信息
@@ -80,5 +68,13 @@ public interface RbacUserService extends IService<RbacUser> {
     JwtUser getCurrent();
 
     ResultVO attachUserRoles(AttachUserRoleDTO attachUserRoleDTO);
+
+    /**
+     * 更新用户启用/禁用状态
+     * @param userIds
+     * @param enableEnum
+     * @return
+     */
+    ResultVO updateUsersEnableStatus(List<Long> userIds, UserEnableEnum enableEnum);
 
 }

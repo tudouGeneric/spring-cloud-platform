@@ -1,7 +1,7 @@
 package org.honeybee.mybatisplus.dto;
 
+import cn.hutool.db.Page;
 import lombok.Data;
-import org.honeybee.base.common.Page;
 import org.honeybee.mybatisplus.enums.StudentIdentityEnum;
 
 @Data

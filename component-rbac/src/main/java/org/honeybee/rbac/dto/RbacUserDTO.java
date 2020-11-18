@@ -39,6 +39,12 @@ public class RbacUserDTO {
     private String password;
 
     /**
+     * 部门id
+     */
+    @NotNull(message = "部门ID不能为空", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class, RbacUserUpdateValidGroup.class})
+    private Long departmentId;
+
+    /**
      * 年龄
      */
     private Integer age;
@@ -46,6 +52,7 @@ public class RbacUserDTO {
     /**
      * 姓名
      */
+    @NotBlank(message = "姓名不能为空", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class, RbacUserUpdateValidGroup.class})
     private String name;
 
     /**
@@ -58,7 +65,6 @@ public class RbacUserDTO {
     /**
      * 昵称
      */
-    @NotBlank(message = "昵称不能为空", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class, RbacUserUpdateValidGroup.class})
     private String nickName;
 
     /**

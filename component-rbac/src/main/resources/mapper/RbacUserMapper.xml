@@ -10,11 +10,13 @@
         <result column="birth" property="birth" />
         <result column="account" property="account" />
         <result column="password" property="password" />
+        <result column="department_id" property="departmentId" />
         <result column="nick_name" property="nickName" />
         <result column="email" property="email" />
         <result column="mobile_phone" property="mobilePhone" />
         <result column="photo_url" property="photoUrl" />
         <result column="last_password_reset_date" property="lastPasswordResetDate" />
+        <result column="enable" property="enable" />
         <result column="delete_status" property="deleteStatus" />
         <result column="created_by" property="createdBy" />
         <result column="created_time" property="createdTime" />
@@ -24,8 +26,14 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, age, name, sex, birth, account, password, nick_name, email, mobile_phone,
-        photo_url, last_password_reset_date, delete_status, created_by, created_time, updated_by, updated_time, version
+        id, age, name, sex, birth, account, password, department_id, nick_name, email, mobile_phone,
+        photo_url, last_password_reset_date, enable, delete_status, created_by, created_time, updated_by, updated_time, version
+    </sql>
+
+    <sql id="UserVO_Column_List">
+        ru.id, ru.name, ru.age, ru.sex, ru.birth, ru.department_id,
+        rd.name AS department_name, ru.nick_name, ru.email, ru.mobile_phone,
+        ru.photo_url, ru.enable, ru.delete_status
     </sql>
     
     <select id="getByAccount" resultMap="BaseResultMap">
@@ -34,5 +42,52 @@
             FROM rbac_user
             WHERE delete_status = 0 AND account = #{account}
     </select>
+
+    <select id="listUserByPage" resultType="org.honeybee.rbac.vo.UserVO">
+        SELECT
+        <include refid="UserVO_Column_List" />
+        FROM rbac_user ru
+            LEFT JOIN rbac_department rd ON ru.department_id = rd.id
+        WHERE ru.delete_status = 0 AND rd.delete_status = 0
+        <if test="userSearch.departmentId != null">
+            AND ru.department_id = #{userSearch.departmentId}
+        </if>
+        <if test="userSearch.account != null and userSearch.account != ''">
+            AND ru.account LIKE concat(#{userSearch.account} + '%')
+        </if>
+        <if test="userSearch.name != null and userSearch.name != ''">
+            AND ru.name LIKE concat('%' + #{userSearch.name} + '%')
+        </if>
+        <if test="userSearch.departmentName != null and userSearch.departmentName != ''">
+            AND rd.name LIKE concat('%' + #{userSearch.departmentName} + '%')
+        </if>
+    </select>
+
+    <select id="findById" resultType="org.honeybee.rbac.vo.UserVO">
+        SELECT
+        <include refid="UserVO_Column_List" />
+        FROM rbac_user ru
+            LEFT JOIN rbac_department rd ON ru.department_id = rd.id
+        WHERE ru.delete_status = 0 AND rd.delete_status = 0
+        AND ru.id = #{userId}
+    </select>
+
+    <update id="deleteByUserIds">
+        UPDATE t_user
+        SET delete_status = 1
+        WHERE id IN
+        <foreach collection="userIds" index="index" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </update>
+
+    <update id="updateEnableByUserIds">
+        UPDATE t_user
+        SET enable = #{enable}
+        WHERE id IN
+        <foreach collection="userIds" index="index" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </update>
     
 </mapper>
