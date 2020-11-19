@@ -31,7 +31,7 @@ public class RbacUser extends BaseEntity {
     /**
      * 性别
      */
-    private SexEnum sex;
+    private SexEnum sex = SexEnum.X;
 
     /**
      * 生日

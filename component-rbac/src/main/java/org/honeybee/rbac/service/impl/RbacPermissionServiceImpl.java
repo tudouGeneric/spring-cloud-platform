@@ -47,10 +47,12 @@ public class RbacPermissionServiceImpl extends ServiceImpl<RbacPermissionMapper,
             throw new BussinessException("最上级的权限类型必须是菜单");
         }
 
-        //所有权限的上级必须是菜单
-        RbacPermission parentPermission = rbacPermissionMapper.selectById(parentId);
-        if(!parentPermission.getType().equals(PermissionTypeEnum.MENU)) {
-            throw new BussinessException("权限的父级必须是菜单类型");
+        if(parentId != 0) {
+            //权限的上级必须是菜单
+            RbacPermission parentPermission = rbacPermissionMapper.selectById(parentId);
+            if (!parentPermission.getType().equals(PermissionTypeEnum.MENU)) {
+                throw new BussinessException("权限的父级必须是菜单类型");
+            }
         }
 
         //将code统一转为大写, code编码必须唯一

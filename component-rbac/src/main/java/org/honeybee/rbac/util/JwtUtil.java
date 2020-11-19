@@ -156,7 +156,7 @@ public class JwtUtil {
         Object oldToken = RedisUtil.get(getUserTokenKey(userDetail.getUsername()));
         if(oldToken != null) {
             //刷新token
-            return refreshToken(oldToken.toString());
+            return loginRefreshOldToken(oldToken.toString(), claims);
         }
 
         String accessToken = generateAccessToken(userDetail.getUsername(), claims);
@@ -190,6 +190,33 @@ public class JwtUtil {
     public static Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
         final Date created = getCreatedDateFromToken(token);
         return (!isCreatedBeforeLastPasswordReset(created, lastPasswordReset) && !isTokenExpired(token));
+    }
+
+    /**
+     * 登录刷新token
+     * @param oldToken 之前登录的token
+     * @param newClaims
+     * @return
+     */
+    public static String loginRefreshOldToken(final String oldToken, final Map newClaims) {
+        String refreshedToken;
+        try {
+            final Claims oldClaims = getClaimsFromToken(oldToken);
+            //校验权限是否相同
+            if(newClaims.get(CLAIM_KEY_AUTHORITIES).toString().equals(oldClaims.get(CLAIM_KEY_AUTHORITIES).toString())) {
+                //刷新token有效期
+                RedisUtil.expire(getUserTokenKey(oldClaims.getSubject()), access_token_expiration);
+                refreshedToken= oldToken;
+            } else {
+                refreshedToken = generateAccessToken(newClaims.get(CLAIM_KEY_ACCOUNT).toString(), newClaims);
+                //存储token
+                RedisUtil.setExpire(getUserTokenKey(newClaims.get(CLAIM_KEY_ACCOUNT).toString()), refreshedToken, access_token_expiration);
+            }
+
+        } catch (Exception e) {
+            refreshedToken = null;
+        }
+        return refreshedToken;
     }
 
     /**

@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/auth")
-@Api(tags = "权限相关接口")
+@Api(tags = "用户验证相关接口")
 public class AuthController {
 
     @Value("${auth.jwt.header}")

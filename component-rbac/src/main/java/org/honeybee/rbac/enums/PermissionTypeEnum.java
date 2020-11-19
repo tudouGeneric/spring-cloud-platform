@@ -9,8 +9,8 @@ import lombok.Setter;
  */
 public enum PermissionTypeEnum {
 
-    MENU(1, "菜单"),
-    INTERFACE(2, "接口");
+    MENU(0, "菜单"),
+    INTERFACE(1, "接口");
 
 
     PermissionTypeEnum(int code, String descp) {

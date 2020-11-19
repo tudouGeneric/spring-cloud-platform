@@ -3,6 +3,7 @@ package org.honeybee.rbac.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import org.honeybee.base.enums.SexEnum;
 import org.honeybee.rbac.valid.group.RbacUserCreateValidGroup;
 import org.honeybee.rbac.valid.group.RbacUserLoginValidGroup;
 import org.honeybee.rbac.valid.group.RbacUserRegisterValidGroup;
@@ -48,6 +49,11 @@ public class RbacUserDTO {
      * 年龄
      */
     private Integer age;
+
+    /**
+     * 性别
+     */
+    private SexEnum sex;
 
     /**
      * 姓名
