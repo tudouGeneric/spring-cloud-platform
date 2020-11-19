@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.honeybee.base.constant.BaseConstant;
 import org.honeybee.base.exception.BussinessException;
 import org.honeybee.base.vo.ResultVO;
@@ -13,13 +14,18 @@ import org.honeybee.rbac.dto.RbacDepartmentDTO;
 import org.honeybee.rbac.entity.RbacDepartment;
 import org.honeybee.rbac.entity.RbacUser;
 import org.honeybee.rbac.mapper.RbacDepartmentMapper;
+import org.honeybee.rbac.mapper.RbacUserMapper;
 import org.honeybee.rbac.service.RbacDepartmentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -27,6 +33,9 @@ public class RbacDepartmentServiceImpl extends ServiceImpl<RbacDepartmentMapper,
 
     @Autowired
     private RbacDepartmentMapper departmentMapper;
+
+    @Autowired
+    private RbacUserMapper userMapper;
 
     /**
      * 部门树
@@ -118,6 +127,49 @@ public class RbacDepartmentServiceImpl extends ServiceImpl<RbacDepartmentMapper,
         //保存至数据库
         departmentMapper.insert(rbacDepartment);
         return new ResultVO(true, "创建成功");
+    }
+
+    @Override
+    @Transactional
+    public ResultVO deleteById(Long departmentId) {
+        //查询要删除的部门是否存在
+        RbacDepartment department = departmentMapper.selectById(departmentId);
+        if(department == null) {
+            return new ResultVO(false, "部门不存在");
+        }
+
+        //查询该部门下的所有部门集合
+        List<RbacDepartment> allList = departmentMapper.findAllLowerLevelByDepartment(department);
+
+        //校验部门下是否有人员
+        List<Long> deparementIds = allList.stream().map(e -> e.getId()).collect(Collectors.toList());
+        QueryWrapper queryWrapper = new QueryWrapper<RbacUser>()
+                .in("department_id", deparementIds);
+        List<RbacUser> rbacUsers = userMapper.selectList(queryWrapper);
+        if(CollectionUtils.isNotEmpty(rbacUsers)) {
+            List<String> deptArray = new ArrayList<>();
+            Set<Long> deptIdSet = rbacUsers.stream().map(e -> e.getDepartmentId()).collect(Collectors.toSet());
+            //查询对应的部门
+            for(Long deptId : deptIdSet) {
+                Optional<RbacDepartment> deptOptional = allList.stream().filter(e -> deptIdSet.contains(deptId)).findFirst();
+                deptOptional.ifPresent(dept -> {
+                    deptArray.add(dept.getName());
+                });
+            }
+
+            //返回错误结果
+            if(CollectionUtils.isNotEmpty(deptArray)) {
+                StringBuilder message = new StringBuilder();
+                message.append("该部门或其子部门[");
+                message.append(StringUtils.join(deptArray, ","));
+                message.append("]存在用户,不可删除");
+                return new ResultVO(false, message.toString());
+            }
+        }
+
+        //实际删除部门
+        departmentMapper.deleteBatchIds(deparementIds);
+        return new ResultVO(true, "删除成功");
     }
 
 }

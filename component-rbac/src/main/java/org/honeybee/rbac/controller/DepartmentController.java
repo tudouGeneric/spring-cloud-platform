@@ -14,10 +14,7 @@ import org.honeybee.rbac.valid.group.RbacDepartmentCreateValidGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/department")
@@ -42,6 +39,12 @@ public class DepartmentController {
         return ResultVO.getResponseMessage(departmentService.create(departmentDTO));
     }
 
-    
+    @DeleteMapping("/{departmentId}")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('DEPARTMENT')")
+    @ApiOperation(value = "删除部门")
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
+    public ResponseMessage delete(@PathVariable("departmentId") Long departmentId) {
+        return ResultVO.getResponseMessage(departmentService.deleteById(departmentId));
+    }
 
 }

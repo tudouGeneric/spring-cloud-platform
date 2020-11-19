@@ -25,4 +25,11 @@ public interface RbacDepartmentService extends IService<RbacDepartment> {
      */
     ResultVO create(RbacDepartmentDTO departmentDTO);
 
+    /**
+     * 根据id删除部门
+     * @param departmentId
+     * @return
+     */
+    ResultVO deleteById(Long departmentId);
+
 }
