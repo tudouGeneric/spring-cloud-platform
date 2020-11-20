@@ -32,7 +32,7 @@ public class UserController {
     private RbacUserService rbacUserService;
 
     @PostMapping("/page")
-    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER')")
+    @PreAuthorize(value = "isAuthenticated()")
     @ApiOperation(value = "根据条件分页查询用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
     public ResponseMessage find(@RequestBody RbacUserSearchDTO rbacUserSearchDTO) {

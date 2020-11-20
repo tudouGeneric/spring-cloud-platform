@@ -67,7 +67,7 @@ public class RoleController {
     @PreAuthorize(value = "isAuthenticated()")
     @ApiOperation(value = "根据条件分页查询角色")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
-    public ResponseMessage find(RbacRoleSearchDTO roleSearchDTO) {
+    public ResponseMessage find(@RequestBody RbacRoleSearchDTO roleSearchDTO) {
         return ResponseMessage.success(null, rbacRoleService.find(roleSearchDTO));
     }
 

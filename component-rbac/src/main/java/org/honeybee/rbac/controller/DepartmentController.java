@@ -31,7 +31,7 @@ public class DepartmentController {
         return ResponseMessage.success(null, departmentService.getDepartmentTree(departmentId));
     }
 
-    @GetMapping("/create")
+    @PostMapping("/create")
     @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('DEPARTMENT')")
     @ApiOperation(value = "新增部门")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})

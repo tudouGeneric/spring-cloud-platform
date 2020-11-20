@@ -203,7 +203,7 @@ public class JwtUtil {
         try {
             final Claims oldClaims = getClaimsFromToken(oldToken);
             //校验权限是否相同
-            if(newClaims.get(CLAIM_KEY_AUTHORITIES).toString().equals(oldClaims.get(CLAIM_KEY_AUTHORITIES).toString())) {
+            if(oldClaims != null && newClaims.get(CLAIM_KEY_AUTHORITIES).toString().equals(oldClaims.get(CLAIM_KEY_AUTHORITIES).toString())) {
                 //刷新token有效期
                 RedisUtil.expire(getUserTokenKey(oldClaims.getSubject()), access_token_expiration);
                 refreshedToken= oldToken;

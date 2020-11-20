@@ -73,7 +73,7 @@
     </select>
 
     <update id="deleteByUserIds">
-        UPDATE t_user
+        UPDATE rbac_user
         SET delete_status = 1
         WHERE id IN
         <foreach collection="userIds" index="index" item="userId" open="(" separator="," close=")">
@@ -82,7 +82,7 @@
     </update>
 
     <update id="updateEnableByUserIds">
-        UPDATE t_user
+        UPDATE rbac_user
         SET enable = #{enable}
         WHERE id IN
         <foreach collection="userIds" index="index" item="userId" open="(" separator="," close=")">

@@ -140,6 +140,7 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
     }
 
     @Override
+    @Transactional
     public ResultVO attachUserRoles(AttachUserRoleDTO attachUserRoleDTO) {
         //删除原来的用户角色关联
         rbacUserRoleMapper.deleteByUserIds(Arrays.asList(attachUserRoleDTO.getUserId()));
@@ -153,6 +154,7 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
     }
 
     @Override
+    @Transactional
     public ResultVO updateUsersEnableStatus(List<Long> userIds, UserEnableEnum enableEnum) {
         if(CollectionUtils.isEmpty(userIds)) {
             return new ResultVO(false, enableEnum.getDescription() + "的用户为空");

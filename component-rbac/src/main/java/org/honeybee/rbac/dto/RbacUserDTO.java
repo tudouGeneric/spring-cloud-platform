@@ -27,7 +27,7 @@ public class RbacUserDTO {
     /**
      * 账号
      */
-    @NotBlank(message = "账号不能为空", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class, RbacUserUpdateValidGroup.class, RbacUserLoginValidGroup.class})
+    @NotBlank(message = "账号不能为空", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class, RbacUserLoginValidGroup.class})
     @Length(min = 1, max = 20, message = "账号长度不能超过20个字符", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class})
     @Pattern(regexp = "[A-Za-z0-9]+", message = "账号格式非法,只能含有字母和数字", groups = {RbacUserCreateValidGroup.class})
     private String account;
@@ -42,7 +42,7 @@ public class RbacUserDTO {
     /**
      * 部门id
      */
-    @NotNull(message = "部门ID不能为空", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class, RbacUserUpdateValidGroup.class})
+    @NotNull(message = "部门ID不能为空", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class})
     private Long departmentId;
 
     /**
@@ -58,7 +58,7 @@ public class RbacUserDTO {
     /**
      * 姓名
      */
-    @NotBlank(message = "姓名不能为空", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class, RbacUserUpdateValidGroup.class})
+    @NotBlank(message = "姓名不能为空", groups = {RbacUserRegisterValidGroup.class, RbacUserCreateValidGroup.class})
     private String name;
 
     /**

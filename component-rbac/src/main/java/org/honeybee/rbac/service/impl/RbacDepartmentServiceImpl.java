@@ -92,6 +92,7 @@ public class RbacDepartmentServiceImpl extends ServiceImpl<RbacDepartmentMapper,
     }
 
     @Override
+    @Transactional
     public ResultVO create(RbacDepartmentDTO departmentDTO) {
         //判断编号code是否重复
         QueryWrapper queryWrapper = new QueryWrapper<RbacDepartment>()

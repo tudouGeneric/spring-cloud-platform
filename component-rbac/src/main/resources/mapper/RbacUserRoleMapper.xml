@@ -12,7 +12,7 @@
 
     <delete id="deleteByUserIds">
         DELETE FROM rbac_user_role
-            WHERE user IN
+            WHERE user_id IN
             <foreach collection="userIds" index="index" item="userId" open="(" separator="," close=")">
                 #{userId}
             </foreach>
