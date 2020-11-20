@@ -1,31 +1,37 @@
 package org.honeybee.base.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
-import lombok.Getter;
 import lombok.Setter;
 
 /**
  * 删除状态通用枚举
  * 用于逻辑删除
  */
-public enum DeleteStatusEnum {
+public enum DeleteStatusEnum implements ICustomEnum<Integer> {
 
     EXISTED(0, "未删除"),
     DELETED(1, "已删除");
 
-    DeleteStatusEnum(int code, String descp) {
-        this.code = code;
-        this.descp = descp;
+    DeleteStatusEnum(int value, String description) {
+        this.value = value;
+        this.description = description;
     }
 
     //标记数据库存的值是code
     @EnumValue
-    @Getter
     @Setter
-    private final int code;
+    private final int value;
 
-    @Getter
     @Setter
-    private final String descp;
+    private final String description;
 
+    @Override
+    public Integer getValue() {
+        return this.value;
+    }
+
+    @Override
+    public String getDescription() {
+        return this.description;
+    }
 }

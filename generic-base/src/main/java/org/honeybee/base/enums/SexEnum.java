@@ -1,30 +1,36 @@
 package org.honeybee.base.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
-import lombok.Getter;
 import lombok.Setter;
 
 /**
  * 性别枚举类
  */
-public enum SexEnum {
+public enum SexEnum implements ICustomEnum<String> {
 
     M("M", "男"),
     F("F", "女"),
     X("X", "未知");
 
-    SexEnum(String code, String descp) {
-        this.code = code;
-        this.descp = descp;
+    SexEnum(String value, String description) {
+        this.value = value;
+        this.description = description;
     }
 
     @EnumValue
-    @Getter
     @Setter
-    private final String code;
+    private final String value;
 
-    @Getter
     @Setter
-    private final String descp;
+    private final String description;
 
+    @Override
+    public String getValue() {
+        return this.value;
+    }
+
+    @Override
+    public String getDescription() {
+        return this.description;
+    }
 }

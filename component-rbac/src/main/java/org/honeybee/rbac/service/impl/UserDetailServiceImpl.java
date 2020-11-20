@@ -57,7 +57,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
             authorities.addAll(roleCodes);
             List<Long> roleIds = rbacRoles.stream().map(e -> e.getId()).collect(Collectors.toList());
             //得到用户角色的所有权限
-            List<RbacPermission> permissions = rbacPermissionMapper.findByRoleIdsAndType(roleIds, PermissionTypeEnum.INTERFACE.getCode());
+            List<RbacPermission> permissions = rbacPermissionMapper.findByRoleIdsAndType(roleIds, PermissionTypeEnum.INTERFACE.getValue());
             Set<String> permissionCodes = permissions.stream().map(e -> e.getCode()).collect(Collectors.toSet());
             if(CollectionUtils.isNotEmpty(permissionCodes)) {
                 authorities.addAll(permissionCodes);

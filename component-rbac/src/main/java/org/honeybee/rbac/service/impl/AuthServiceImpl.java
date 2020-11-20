@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserToken login(String username, String password) {
         //用户验证
-         final Authentication authentication = this.authenticate(username, password);
+        final Authentication authentication = this.authenticate(username, password);
         //存储认证信息
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //生成token

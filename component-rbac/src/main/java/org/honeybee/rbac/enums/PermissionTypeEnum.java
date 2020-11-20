@@ -1,31 +1,38 @@
 package org.honeybee.rbac.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
-import lombok.Getter;
 import lombok.Setter;
+import org.honeybee.base.enums.ICustomEnum;
 
 /**
  * 权限类型枚举值
  */
-public enum PermissionTypeEnum {
+public enum PermissionTypeEnum implements ICustomEnum<Integer> {
 
     MENU(0, "菜单"),
     INTERFACE(1, "接口");
 
-
-    PermissionTypeEnum(int code, String descp) {
-        this.code = code;
-        this.descp = descp;
+    PermissionTypeEnum(int value, String description) {
+        this.value = value;
+        this.description = description;
     }
 
-    //标记数据库存的值是code
+    //标记数据库存的值是value
     @EnumValue
-    @Getter
     @Setter
-    private final int code;
+    private final Integer value;
 
-    @Getter
     @Setter
-    private final String descp;
+    private final String description;
+
+    @Override
+    public Integer getValue() {
+        return this.value;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
 
 }

@@ -1,30 +1,38 @@
 package org.honeybee.rbac.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
-import lombok.Getter;
 import lombok.Setter;
+import org.honeybee.base.enums.ICustomEnum;
 
 /**
  * 用户是否启用枚举类
  */
-public enum UserEnableEnum {
+public enum UserEnableEnum implements ICustomEnum<Integer> {
 
     ENABLE(1, "启用"),
     DISABLE(0, "禁用");
 
-    UserEnableEnum(int code, String descp) {
-        this.code = code;
-        this.descp = descp;
+    UserEnableEnum(int value, String description) {
+        this.value = value;
+        this.description = description;
     }
 
     //标记数据库存的值是code
     @EnumValue
-    @Getter
     @Setter
-    private final int code;
+    private final int value;
 
-    @Getter
     @Setter
-    private final String descp;
+    private final String description;
+
+    @Override
+    public Integer getValue() {
+        return this.value;
+    }
+
+    @Override
+    public String getDescription() {
+        return this.description;
+    }
 
 }

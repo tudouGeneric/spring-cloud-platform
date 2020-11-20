@@ -19,6 +19,8 @@ mybatis-plus:
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
   mapper-locations: classpath:/mapper/*.xml
   typeEnumsPackage: org.honeybee.*.enums  # 配置扫描通用枚举， 支持统配符 * 或者 ; 分割
+  configuration:
+    default-enum-type-handler: com.baomidou.mybatisplus.extension.handlers.MybatisEnumTypeHandler
 
 ##jwt配置
 auth:
@@ -35,3 +37,7 @@ auth:
     - "/webjars/**"
     - "/doc.html"
     - "/api/**"
+
+enums:
+  param:
+    suffix: Str   #实体类中的枚举字段返回的描述值后缀

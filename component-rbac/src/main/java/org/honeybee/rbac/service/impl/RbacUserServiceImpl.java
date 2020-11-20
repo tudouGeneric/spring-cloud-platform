@@ -155,11 +155,11 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
     @Override
     public ResultVO updateUsersEnableStatus(List<Long> userIds, UserEnableEnum enableEnum) {
         if(CollectionUtils.isEmpty(userIds)) {
-            return new ResultVO(false, enableEnum.getDescp() + "的用户为空");
+            return new ResultVO(false, enableEnum.getDescription() + "的用户为空");
         }
 
-        rbacUserMapper.updateEnableByUserIds(userIds, enableEnum.getCode());
-        return new ResultVO(true,  enableEnum.getDescp() + "成功");
+        rbacUserMapper.updateEnableByUserIds(userIds, enableEnum.getValue());
+        return new ResultVO(true,  enableEnum.getDescription() + "成功");
     }
 
 }

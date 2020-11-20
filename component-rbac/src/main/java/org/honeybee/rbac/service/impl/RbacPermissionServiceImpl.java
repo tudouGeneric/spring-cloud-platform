@@ -35,7 +35,7 @@ public class RbacPermissionServiceImpl extends ServiceImpl<RbacPermissionMapper,
 
     @Override
     public List<RbacPermission> findByRoleIdsAndType(List<Long> roleIds, PermissionTypeEnum typeEnum) {
-        return rbacPermissionMapper.findByRoleIdsAndType(roleIds, typeEnum.getCode());
+        return rbacPermissionMapper.findByRoleIdsAndType(roleIds, typeEnum.getValue());
     }
 
     @Override
