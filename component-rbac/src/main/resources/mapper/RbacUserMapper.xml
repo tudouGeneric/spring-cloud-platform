@@ -89,5 +89,14 @@
             #{userId}
         </foreach>
     </update>
+
+    <update id="updatePassword">
+        UPDATE rbac_user
+        SET password = #{password}, last_password_reset_date = now()
+        WHERE id IN
+        <foreach collection="userIds" index="index" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </update>
     
 </mapper>

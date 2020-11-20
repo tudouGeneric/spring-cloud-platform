@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.honeybee.base.exception.BussinessException;
 import org.honeybee.base.vo.ResultVO;
 import org.honeybee.mybatisplus.util.PageUtil;
@@ -27,6 +28,7 @@ import org.honeybee.rbac.util.JwtUtil;
 import org.honeybee.rbac.vo.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +49,9 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
 
     @Autowired
     private RbacDepartmentMapper rbacDepartmentMapper;
+
+    @Value("${custom.user.init-password}")
+    private String initPassword;
 
     @Override
     public IPage<UserVO> find(RbacUserSearchDTO rbacUserSearchDTO) {
@@ -85,9 +90,12 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
         RbacUser user = new RbacUser();
         BeanUtils.copyProperties(userDTO, user, "id");
 
+        if(StringUtils.isBlank(initPassword)) {
+            throw new BussinessException("初始密码配置[custom.user.init-password]为空");
+        }
         //密码加密
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setPassword(passwordEncoder.encode(initPassword));
         user.setLastPasswordResetDate(new Date());
         rbacUserMapper.insert(user);
 
@@ -162,6 +170,19 @@ public class RbacUserServiceImpl extends ServiceImpl<RbacUserMapper, RbacUser> i
 
         rbacUserMapper.updateEnableByUserIds(userIds, enableEnum.getValue());
         return new ResultVO(true,  enableEnum.getDescription() + "成功");
+    }
+
+    @Override
+    public ResultVO resetPassword(List<Long> userIds) {
+        if(CollectionUtils.isEmpty(userIds)) {
+            return new ResultVO(false, "重置密码的用户为空");
+        }
+        if(StringUtils.isBlank(initPassword)) {
+            throw new BussinessException("初始密码配置[custom.user.init-password]为空");
+        }
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        rbacUserMapper.updatePassword(passwordEncoder.encode(initPassword), userIds);
+        return new ResultVO(true, "重置成功");
     }
 
 }

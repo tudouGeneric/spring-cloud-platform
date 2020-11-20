@@ -1,6 +1,8 @@
 package org.honeybee.rbac.service;
 
+import org.honeybee.base.vo.ResultVO;
 import org.honeybee.rbac.dto.RbacUserDTO;
+import org.honeybee.rbac.dto.UserUpdatePasswordDTO;
 import org.honeybee.rbac.pojo.JwtUser;
 import org.honeybee.rbac.vo.UserToken;
 import org.honeybee.rbac.vo.UserVO;
@@ -40,5 +42,12 @@ public interface AuthService {
      * @return
      */
     JwtUser getUserByToken(String token);
+
+    /**
+     * 更新密码
+     * @param updatePasswordDTO
+     * @return
+     */
+    ResultVO updatePassword(UserUpdatePasswordDTO updatePasswordDTO, JwtUser userDetail);
 
 }

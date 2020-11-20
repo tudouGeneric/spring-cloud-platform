@@ -77,4 +77,11 @@ public interface RbacUserService extends IService<RbacUser> {
      */
     ResultVO updateUsersEnableStatus(List<Long> userIds, UserEnableEnum enableEnum);
 
+    /**
+     * 重置用户密码为初始密码
+     * @param userIds
+     * @return
+     */
+    ResultVO resetPassword(List<Long> userIds);
+
 }

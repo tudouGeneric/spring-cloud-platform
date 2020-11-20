@@ -41,3 +41,7 @@ auth:
 enums:
   param:
     suffix: Str   #实体类中的枚举字段返回的描述值后缀
+
+custom:
+  user:
+    init-password: 123456   #自定义用户初始密码

@@ -53,4 +53,11 @@ public interface RbacUserMapper extends BaseMapper<RbacUser> {
      */
     void updateEnableByUserIds(@Param("userIds") Collection<Long> userIds, @Param("enable") int enable);
 
+    /**
+     * 批量更新用户密码
+     * @param password
+     * @return
+     */
+    int updatePassword(@Param("password") String password, Collection<Long> userIds);
+
 }

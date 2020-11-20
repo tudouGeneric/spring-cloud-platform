@@ -97,4 +97,12 @@ public class UserController {
         return ResultVO.getResponseMessage(result);
     }
 
+    @PostMapping("/reset/password")
+    @PreAuthorize(value = BaseConstant.SUPER_ADMIN_ROLE_AUTHORITY + "hasAuthority('USER')")
+    @ApiOperation(value = "重置用户密码")
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt-token", value = "jwt-token", required = true, dataType = "string", paramType = "header")})
+    public ResponseMessage resetPassword(@RequestBody List<Long> userIds) {
+        return ResultVO.getResponseMessage(rbacUserService.resetPassword(userIds));
+    }
+
 }

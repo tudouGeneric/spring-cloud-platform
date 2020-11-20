@@ -1,12 +1,10 @@
 package org.honeybee.rbac.filter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.honeybee.base.exception.ServiceException;
 import org.honeybee.rbac.pojo.JwtUser;
 import org.honeybee.rbac.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
