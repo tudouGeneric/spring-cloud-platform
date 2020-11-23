@@ -15,6 +15,7 @@
     <artifactId>generic-base</artifactId>
 
     <dependencies>
+        <!-- mvc -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

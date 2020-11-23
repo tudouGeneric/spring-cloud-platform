@@ -37,6 +37,12 @@ auth:
     - "/webjars/**"
     - "/doc.html"
     - "/api/**"
+    - "/test/feign/**"
+
+#feign:
+#  sentinel:
+#    enabled: true     #开启sentinel对feign的支持
+
 
 enums:
   param:

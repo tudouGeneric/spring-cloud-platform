@@ -24,6 +24,7 @@
         <module>component-file</module>
         <module>component-rbac</module>
         <module>component-cache</module>
+        <module>component-remotecall</module>
     </modules>
 
     <properties>
@@ -38,7 +39,6 @@
         <flyway.core.version>5.2.4</flyway.core.version>
         <hutool.version>5.1.1</hutool.version>
         <commons-lang3.version>3.10</commons-lang3.version>
-        <aop.version>2.2.0.RELEASE</aop.version>
         <knife4j.version>2.0.4</knife4j.version>
         <easyExcel.version>2.2.6</easyExcel.version>
         <security.version>2.3.1.RELEASE</security.version>
@@ -124,7 +124,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-aop</artifactId>
-                <version>${aop.version}</version>
+                <version>${web.version}</version>
             </dependency>
 
             <!-- knife4j -->
@@ -188,6 +188,20 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-pool2</artifactId>
                 <version>${commons-pool2.version}</version>
+            </dependency>
+
+            <!-- openfeign -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${web.version}</version>
+            </dependency>
+
+            <!--sentinel -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+                <version>${web.version}</version>
             </dependency>
 
         </dependencies>

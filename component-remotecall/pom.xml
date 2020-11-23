@@ -7,49 +7,37 @@
         <artifactId>spring-cloud-platform</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <name>rbac</name>
+    <name>remotecall</name>
     <description>Demo project for Spring Boot</description>
     <packaging>jar</packaging>
 
     <groupId>org.honeybee</groupId>
-    <artifactId>component-rbac</artifactId>
+    <artifactId>component-remotecall</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>org.honeybee</groupId>
-            <artifactId>component-mybatisplus</artifactId>
+            <artifactId>generic-base</artifactId>
             <version>${project.version}</version>
         </dependency>
 
+        <!-- feign -->
         <dependency>
-            <groupId>org.honeybee</groupId>
-            <artifactId>component-cache</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>org.honeybee</groupId>
-            <artifactId>component-remotecall</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <!--spring security-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-
-        <!--spring security jwt-->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-jwt</artifactId>
-        </dependency>
-
-        <!--jwt-->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-        </dependency>
+        <!--sentinel -->
+        <!--<dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>-->
     </dependencies>
 
     <build>

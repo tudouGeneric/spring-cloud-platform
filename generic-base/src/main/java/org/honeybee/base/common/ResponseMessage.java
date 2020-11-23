@@ -3,6 +3,7 @@ package org.honeybee.base.common;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 
 /**
  * 返回数据
@@ -51,7 +52,7 @@ public class ResponseMessage<T> {
      * @return
      */
     public static <T> ResponseMessage<T> success(String message) {
-        return new ResponseMessage(message,200, true);
+        return new ResponseMessage(message, HttpStatus.OK.value(), true);
     }
 
     /**
@@ -61,7 +62,7 @@ public class ResponseMessage<T> {
      * @param <T>
      */
     public static <T> ResponseMessage<T> success(String message, T result) {
-        return new ResponseMessage(message, result, 200, true);
+        return new ResponseMessage(message, result, HttpStatus.OK.value(), true);
     }
 
     /**
@@ -70,7 +71,7 @@ public class ResponseMessage<T> {
      * @return
      */
     public static <T> ResponseMessage<T> fail(String message) {
-        return new ResponseMessage(message, 200, false);
+        return new ResponseMessage(message, HttpStatus.OK.value(), false);
     }
 
     /**
@@ -90,7 +91,7 @@ public class ResponseMessage<T> {
      * @return
      */
     public static <T> ResponseMessage<T> fail(String message, T result) {
-        return new ResponseMessage(message, result, 200, false);
+        return new ResponseMessage(message, result, HttpStatus.OK.value(), false);
     }
 
     /**
