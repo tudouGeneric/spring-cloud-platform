@@ -39,7 +39,19 @@ auth:
     - "/api/**"
     - "/test/feign/**"
 
-#feign:
+#feign配置
+feign:
+  httpclient:
+    enabled: true
+  okhttp:
+    enabled: true
+  client:
+    config:
+      default:
+        # 连接超时时间5s
+        connectTimeout: 5000
+        # 接口超时时间60s
+        readTimeout: 60000
 #  sentinel:
 #    enabled: true     #开启sentinel对feign的支持
 

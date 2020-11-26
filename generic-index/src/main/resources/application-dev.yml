@@ -47,6 +47,41 @@ spring:
         max-idle: 8
         #连接池最小空闲连接
         min-idle: 0
+  ##Quartz配置
+  quartz:
+    jdbc:
+      # 初始化Quartz表结构,项目第一次启动配置程always,然后改成never 否则已生成的job会被初始化掉
+      initialize-schema: always
+    #将任务持久化到数据库
+    job-store-type: jdbc
+    #程序结束时会等待quartz相关的内容结果
+    wait-for-jobs-to-complete-on-shutdown: true
+    # QuartzScheduler启动时更新己存在的Job,这样就不用每次修改targetObject后删除qrtz_job_details表对应记录
+    overwrite-existing-jobs: true
+    #参数配置
+    properties:
+      org:
+        quartz:
+          #scheduler相关
+          scheduler:
+            instanceName: scheduler
+            instanceId: AUTO
+          #持久化相关
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            #表示数据库中相关表是以QRTZ_开头的
+            tablePrefix: QRTZ_
+            useProperties: false
+          #线程池相关
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            #线程数
+            threadCount: 10
+            #线程优先级
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+
 
 ##自定义
 custom:
