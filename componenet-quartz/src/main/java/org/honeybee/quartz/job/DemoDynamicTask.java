@@ -10,16 +10,17 @@ import org.springframework.stereotype.Component;
 
 /**
  * 第二种集成Quartz,定义可动态修改的任务
+ *  没有显示注册到Quartz中进行管理
  */
-@Configuration
-@Component
+//@Configuration
+//@Component
 @Slf4j
-public class DempDynamicTask implements SchedulingConfigurer {
+public class DemoDynamicTask implements SchedulingConfigurer {
 
     /**
      * cron表达式(以下参数都可以设置成从配置文件读取)
      */
-    private  String cron="0 0 0 1 * ?";
+    private  String cron="0/30 * * * * ?";
     /**
      * 任务名称
      */
