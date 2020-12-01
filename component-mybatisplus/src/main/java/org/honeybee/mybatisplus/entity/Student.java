@@ -14,6 +14,11 @@ import org.honeybee.mybatisplus.enums.StudentIdentityEnum;
 public class Student extends BaseEntity {
 
     /**
+     * uuid
+     */
+    private String uuid;
+
+    /**
      * 姓名
      */
 

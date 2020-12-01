@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.shardingsphere.core.keygen.KeyGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.honeybee.base.vo.ResultVO;
@@ -29,6 +30,9 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     @Autowired
     private StudentMapper studentMapper;
 
+    @Autowired
+    private KeyGenerator keyGenerator;
+
     @Override
     @Transactional
     public ResultVO saveStudent(StudentDTO student) {
@@ -51,6 +55,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
 
         //同步至数据库
         Student s = new Student();
+        s.setUuid(keyGenerator.generateKey().toString());
         BeanUtils.copyProperties(student, s, "id");
         studentMapper.insert(s);
 

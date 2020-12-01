@@ -1,30 +1,56 @@
 server:
   port: 8090    #启动端口
 
-##数据源配置
+#shardingsphere数据源配置
+sharding:
+  jdbc:
+    datasource:
+      names: db
+      db:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://139.196.137.238:3306/spring_cloud_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&useAffectedRows=true&serverTimezone=Asia/Shanghai
+        username: root
+        password: root
+    #分表规则配置
+    config:
+      sharding:
+        tables:
+          t_test_student:
+            actual-data-nodes: db.t_test_student$->{0..2}    #指定表
+            table-strategy:
+              inline:
+                sharding-column: age     #指定分表取决于的字段
+                algorithm-expression: t_test_student$->{age%3}     #指定分片表达式
+      props:
+        sql:
+          show: true    #配置显示sql语句
+
 spring:
   #mysql数据库配置
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://139.196.137.238:3306/spring_cloud_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&useAffectedRows=true&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
-    druid:
-      # 连接池配置
-      initial-size: 5
-      min-idle: 5
-      max-active: 20
-      # 连接等待超时时间
-      max-wait: 30000
-      # 配置检测可以关闭的空闲连接间隔时间
-      time-between-eviction-runs-millis: 60000
-      # 配置连接在池中的最小生存时间
-      min-evictable-idle-time-millis: 300000
-      validation-query: select 'x'
-      test-while-idle: true
-      test-on-borrow: false
-      test-on-return: false
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://139.196.137.238:3306/spring_cloud_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&useAffectedRows=true&serverTimezone=Asia/Shanghai
+#    username: root
+#    password: root
+#    druid:
+#      # 连接池配置
+#      initial-size: 5
+#      min-idle: 5
+#      max-active: 20
+#      # 连接等待超时时间
+#      max-wait: 30000
+#      # 配置检测可以关闭的空闲连接间隔时间
+#      time-between-eviction-runs-millis: 60000
+#      # 配置连接在池中的最小生存时间
+#      min-evictable-idle-time-millis: 300000
+#      validation-query: select 'x'
+#      test-while-idle: true
+#      test-on-borrow: false
+#      test-on-return: false
+  main:
+    allow-bean-definition-overriding: true    #使用shardingsphere需要配置这个;
   #Redis数据库配置
   redis:
     #Redis数据库索引,默认为0

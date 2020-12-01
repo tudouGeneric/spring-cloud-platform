@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <name>rbac</name>
-    <description>Demo project for Spring Boot</description>
+    <description>rbac权限模块</description>
     <packaging>jar</packaging>
 
     <groupId>org.honeybee</groupId>

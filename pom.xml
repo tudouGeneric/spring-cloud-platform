@@ -33,7 +33,7 @@
         <web.version>2.2.0.RELEASE</web.version>
         <lombok.version>1.18.10</lombok.version>
         <mybatis.plus.version>3.2.0</mybatis.plus.version>
-        <mybatis.plus.generator.version>3.3.2</mybatis.plus.generator.version>
+        <mybatis.plus.generator.version>3.2.0</mybatis.plus.generator.version>
         <freemarker.version>2.3.28</freemarker.version>
         <mysql.connector.version>8.0.16</mysql.connector.version>
         <druid.version>1.1.18</druid.version>
@@ -47,6 +47,7 @@
         <jjit.version>0.9.1</jjit.version>
         <fastjson.version>1.2.73</fastjson.version>
         <commons-pool2.version>2.9.0</commons-pool2.version>
+        <shardingsphere.version>3.1.0</shardingsphere.version>
     </properties>
 
     <dependencyManagement>
@@ -210,6 +211,19 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-quartz</artifactId>
                 <version>${web.version}</version>
+            </dependency>
+
+            <!--shardingsphere-->
+            <dependency>
+                <groupId>io.shardingsphere</groupId>
+                <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+            <!-- for spring namespace -->
+            <dependency>
+                <groupId>io.shardingsphere</groupId>
+                <artifactId>sharding-jdbc-spring-namespace</artifactId>
+                <version>${shardingsphere.version}</version>
             </dependency>
 
         </dependencies>

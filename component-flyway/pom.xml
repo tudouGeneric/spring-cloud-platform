@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <name>flyway</name>
-    <description>Demo project for Spring Boot</description>
+    <description>数据库管理脚本工具flyway</description>
     <packaging>jar</packaging>
 
     <groupId>org.honeybee</groupId>
