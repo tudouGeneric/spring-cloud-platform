@@ -73,7 +73,7 @@ spring:
         max-idle: 8
         #连接池最小空闲连接
         min-idle: 0
-  ##Quartz配置
+  #Quartz配置
   quartz:
     jdbc:
       # 初始化Quartz表结构,项目第一次启动配置程always,然后改成never 否则已生成的job会被初始化掉
@@ -107,6 +107,14 @@ spring:
             #线程优先级
             threadPriority: 5
             threadsInheritContextClassLoaderOfInitializingThread: true
+  #kafka配置
+#  kafka:
+#    producer:
+#      client-id: 0    #生产客户端id
+#      bootstrap-servers: 139.196.137.238:9092     #连接的broker地址,如有多个用,隔开
+#      #key序列化类,可以自定义序列化（broker端接收的消息必须以字节数组的形式）
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+
 
 
 ##自定义

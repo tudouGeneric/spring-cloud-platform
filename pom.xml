@@ -25,7 +25,8 @@
         <module>component-rbac</module>
         <module>component-cache</module>
         <module>component-remotecall</module>
-        <module>componenet-quartz</module>
+        <module>component-quartz</module>
+        <module>component-kafka</module>
     </modules>
 
     <properties>
@@ -48,6 +49,8 @@
         <fastjson.version>1.2.73</fastjson.version>
         <commons-pool2.version>2.9.0</commons-pool2.version>
         <shardingsphere.version>3.1.0</shardingsphere.version>
+        <spring-kafka.version>2.4.11.RELEASE</spring-kafka.version>
+        <kafka-clients.version>2.4.1</kafka-clients.version>
     </properties>
 
     <dependencyManagement>
@@ -224,6 +227,19 @@
                 <groupId>io.shardingsphere</groupId>
                 <artifactId>sharding-jdbc-spring-namespace</artifactId>
                 <version>${shardingsphere.version}</version>
+            </dependency>
+
+            <!-- spring kafka support -->
+            <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka</artifactId>
+                <version>${spring-kafka.version}</version>
+            </dependency>
+            <!-- kafka-clients -->
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-clients</artifactId>
+                <version>${kafka-clients.version}</version>
             </dependency>
 
         </dependencies>
