@@ -56,8 +56,8 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-
-        <!--shardingsphere-->
+<!--
+        &lt;!&ndash;shardingsphere&ndash;&gt;
         <dependency>
             <groupId>io.shardingsphere</groupId>
             <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
@@ -68,7 +68,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- for spring namespace -->
+        &lt;!&ndash; for spring namespace &ndash;&gt;
         <dependency>
             <groupId>io.shardingsphere</groupId>
             <artifactId>sharding-jdbc-spring-namespace</artifactId>
@@ -78,7 +78,8 @@
                     <groupId>com.google.guava</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>-->
+
     </dependencies>
 
     <build>
