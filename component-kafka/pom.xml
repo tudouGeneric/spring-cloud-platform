@@ -16,6 +16,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>org.honeybee</groupId>
+            <artifactId>generic-base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- spring kafka support -->
         <dependency>
             <groupId>org.springframework.kafka</groupId>

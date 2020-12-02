@@ -108,13 +108,25 @@ spring:
             threadPriority: 5
             threadsInheritContextClassLoaderOfInitializingThread: true
   #kafka配置
-#  kafka:
-#    producer:
-#      client-id: 0    #生产客户端id
-#      bootstrap-servers: 139.196.137.238:9092     #连接的broker地址,如有多个用,隔开
-#      #key序列化类,可以自定义序列化（broker端接收的消息必须以字节数组的形式）
-#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-
+  kafka:
+    #生产者配置
+    producer:
+      client-id: 0    #生产客户端id
+      bootstrap-servers: 139.196.137.238:9092     #连接的broker地址,如有多个用,隔开
+      #key序列化类,可以自定义序列化（broker端接收的消息必须以字节数组的形式）
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      #value序列化类,可以自定义序列化
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      #重试次数(提高可靠性,会影响同步性能,需要等待上一条消息发送完成后才发送下一条)
+      retries: 1
+    #消费者配置
+    consumer:
+      client-id: 0  #消费客户端id
+      bootstrap-servers: 139.196.137.238:9092     #连接的broker地址,如有多个用,隔开
+      #key序列化类,可以自定义序列化（broker端接收的消息必须以字节数组的形式）
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      #value序列化类,可以自定义序列化
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 
 ##自定义
