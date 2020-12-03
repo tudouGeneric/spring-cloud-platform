@@ -35,7 +35,6 @@
     <logger name="org.apache.kafka.clients.consumer" level="info"></logger>
     <logger name="org.apache.kafka.clients.FetchSessionHandler" level="info"></logger>
     <logger name="org.springframework.kafka.listener.KafkaMessageListenerContainer" level="info"></logger>
-    <logger name="org.springframework.kafka.listener.KafkaMessageListenerContainer" level="info"></logger>
     <logger name="org.springframework.scheduling.quartz.LocalDataSourceJobStore" level="info"></logger>
 
     <root level="DEBUG">

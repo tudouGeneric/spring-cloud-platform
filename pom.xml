@@ -229,6 +229,7 @@
                 <version>${shardingsphere.version}</version>
             </dependency>
 
+            <!-- 整合kafka-clients和sprng-kafka要考虑版本兼容性 -->
             <!-- spring kafka support -->
             <dependency>
                 <groupId>org.springframework.kafka</groupId>
