@@ -27,6 +27,7 @@
         <module>component-remotecall</module>
         <module>component-quartz</module>
         <module>component-kafka</module>
+        <module>component-es</module>
     </modules>
 
     <properties>
@@ -241,6 +242,13 @@
                 <groupId>org.apache.kafka</groupId>
                 <artifactId>kafka-clients</artifactId>
                 <version>${kafka-clients.version}</version>
+            </dependency>
+
+            <!-- elasticsearch -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+                <version>${web.version}</version>
             </dependency>
 
         </dependencies>

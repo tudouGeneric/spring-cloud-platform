@@ -15,9 +15,9 @@ public class MessageListener {
      * 监听固定topic的消息
      */
     //@KafkaListener id/groupId默认是同一个值,指定消费者组; topics指定topic,可多个;
-    @KafkaListener(id="consumer1", topics="student-info")
+    /*@KafkaListener(id="consumer1", topics="student-info")
     public void listen(String message) {
         log.info("接收到topic:{}的消息:{}", "stuent-info", message);
-    }
+    }*/
 
 }
