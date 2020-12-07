@@ -31,6 +31,7 @@ auth:
     # 不需要鉴权的路径
   ignores:
     - "/"
+    - "/error"
     - "/swagger-ui.html"
     - "/swagger-resources/**"
     - "/v2/**"
@@ -38,6 +39,7 @@ auth:
     - "/doc.html"
     - "/api/**"
     - "/test/feign/**"
+    - "/static/**"
 
 #feign配置
 feign:
