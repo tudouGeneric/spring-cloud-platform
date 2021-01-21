@@ -52,6 +52,7 @@
         <shardingsphere.version>3.1.0</shardingsphere.version>
         <spring-kafka.version>2.4.11.RELEASE</spring-kafka.version>
         <kafka-clients.version>2.4.1</kafka-clients.version>
+        <spring-integration-redis.version>5.4.0</spring-integration-redis.version>
     </properties>
 
     <dependencyManagement>
@@ -188,6 +189,22 @@
                 <artifactId>spring-boot-starter-data-redis</artifactId>
                 <version>${web.version}</version>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-integration -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-integration</artifactId>
+                <version>${web.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-redis -->
+            <dependency>
+                <groupId>org.springframework.integration</groupId>
+                <artifactId>spring-integration-redis</artifactId>
+                <version>${spring-integration-redis.version}</version>
+            </dependency>
+
+
 
             <!--commons-pool2 -->
             <dependency>
