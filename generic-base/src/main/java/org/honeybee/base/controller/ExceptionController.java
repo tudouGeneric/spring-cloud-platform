@@ -5,7 +5,6 @@ import org.honeybee.base.common.ResponseMessage;
 import org.honeybee.base.constant.BaseConstant;
 import org.honeybee.base.exception.BussinessException;
 import org.honeybee.base.exception.ServiceException;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
