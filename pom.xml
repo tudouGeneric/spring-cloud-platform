@@ -47,7 +47,7 @@
         <security.version>2.3.1.RELEASE</security.version>
         <security.jwt.version>1.1.1.RELEASE</security.jwt.version>
         <jjit.version>0.9.1</jjit.version>
-        <fastjson.version>1.2.73</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <commons-pool2.version>2.9.0</commons-pool2.version>
         <shardingsphere.version>3.1.0</shardingsphere.version>
         <spring-kafka.version>2.4.11.RELEASE</spring-kafka.version>
