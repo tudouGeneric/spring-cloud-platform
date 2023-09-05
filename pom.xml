@@ -51,7 +51,7 @@
         <commons-pool2.version>2.9.0</commons-pool2.version>
         <shardingsphere.version>3.1.0</shardingsphere.version>
         <spring-kafka.version>2.4.11.RELEASE</spring-kafka.version>
-        <kafka-clients.version>2.4.1</kafka-clients.version>
+        <kafka-clients.version>2.6.3</kafka-clients.version>
         <spring-integration-redis.version>5.4.0</spring-integration-redis.version>
     </properties>
 
